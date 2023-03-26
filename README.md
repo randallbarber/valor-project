@@ -1,10 +1,10 @@
 # valor-project
 ## v0.1 3/26/23
 **bugs/fixes**
-- enemy physcics aren't replicated
-- player can join room in middle of match
+- enemy physiccs aren't replicated
+- ~~~player can join room in middle of match~~~ barriers aren't buffered and possibly more issues
 - player leaves room in middle of match resulting in loss replication
-- needs room list
+- ~~~needs room list~~~ room list needs to be polished and cleaned up
 - player usernames
 - player list within room
 - death screen isn't properly implemented with respawn system
