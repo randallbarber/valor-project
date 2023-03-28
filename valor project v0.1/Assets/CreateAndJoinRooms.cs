@@ -2,12 +2,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_InputField createInput;
     [SerializeField] TMP_InputField joinInput;
-    [SerializeField] PlayerCount playerCount;
     public void CreateRoom()
     {
         PhotonNetwork.CreateRoom(createInput.text);
@@ -24,4 +24,8 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel("Game");
     }
+    public void JoinRoomOnList(string _RoomName)
+    {
+        PhotonNetwork.JoinRoom(_RoomName);
+    }    
 }

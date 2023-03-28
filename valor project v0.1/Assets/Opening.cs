@@ -6,13 +6,15 @@ using Photon.Pun;
 public class Opening : MonoBehaviourPun
 {
     [SerializeField] float health = 100f;
-    public bool dead;
+    public bool dead = false;
 
     MeshRenderer Mrenderer;
+    Collider collider__;
 
     private void Start()
     {
         Mrenderer = GetComponent<MeshRenderer>();
+        collider__ = GetComponent<Collider>();
     }
     public void TakeDamage(float amount)
     {
@@ -21,9 +23,9 @@ public class Opening : MonoBehaviourPun
             health = Mathf.Clamp(health -= amount, 0, float.MaxValue);
             if (health == 0)
             {
-                Debug.LogError("dead" + health);
                 dead = true;
                 Mrenderer.enabled = false;
+                collider__.isTrigger = true;
                 gameObject.layer = LayerMask.NameToLayer("Barrier");
             }
         }
@@ -40,6 +42,7 @@ public class Opening : MonoBehaviourPun
         Debug.Log("repaired to " + health);
         dead = false;
         Mrenderer.enabled = true;
-        gameObject.layer = LayerMask.NameToLayer("Default");
+        collider__.isTrigger = false;
+        gameObject.layer = LayerMask.NameToLayer("Ground");
     }
 }

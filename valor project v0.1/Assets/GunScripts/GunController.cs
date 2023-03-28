@@ -27,9 +27,9 @@ public class GunController : MonoBehaviourPun
     [SerializeField] Transform lineStart;
 
     [SerializeField] GameObject impact;
-    [SerializeField] string gunshotSound;
     [SerializeField] GameObject HitSound;
     [SerializeField] GameObject headShotSound;
+    [SerializeField] GameObject gunshotSound;
     [SerializeField] TrailRenderer line;
     [SerializeField] ParticleSystem muzzleFlash;
 
@@ -107,8 +107,8 @@ public class GunController : MonoBehaviourPun
         animator.Play("recoil", 0, 0f);
         muzzleFlash.Play();
 
-        gunshotclone = PhotonNetwork.Instantiate(gunshotSound, cam.transform.position, cam.transform.rotation);
-        //PhotonNetwork.Destroy(gunshotclone.GetPhotonView());
+        gunshotclone = Instantiate(gunshotSound, cam.transform.position, cam.transform.rotation);
+        Destroy(gunshotclone, 1f);
 
         if (Physics.Raycast(cam.transform.position, GetShootingDirection(), out hit, range, HitApplicable))
         {
@@ -116,10 +116,11 @@ public class GunController : MonoBehaviourPun
             int TrailID = trailGO.GetComponent<PhotonView>().ViewID;
             photonView.RPC("RPC_SpawnTrail", RpcTarget.All, TrailID, hit.point);
 
-            PhotonView TarPly_PV = hit.transform.GetComponent<PhotonView>();
-            if (TarPly_PV)
+            
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                    int TarPlyID = TarPly_PV.ViewID;
+                PhotonView TarPly_PV = hit.transform.GetComponent<PhotonView>();
+                int TarPlyID = TarPly_PV.ViewID;
                     if (hit.collider.tag == "Head")
                     {
                     GameObject HitSoundClone = Instantiate(HitSound, cam.transform.position, cam.transform.rotation, clonedFolder.transform);

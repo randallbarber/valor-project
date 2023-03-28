@@ -6,12 +6,14 @@ using Photon.Pun;
 
 public class MenuUI : MonoBehaviourPunCallbacks
 {
-    // Main menu UI
+    [Header("Main Menu")]
 
     [SerializeField] Canvas SettingsMenu;
     [SerializeField] TMP_InputField inputField;
     [SerializeField] Slider slider;
+    [SerializeField] Canvas __RoomList;
     bool settingsOpen;
+    bool roomsOpen;
     public void QuitGame()
     {
         Application.Quit();
@@ -39,8 +41,21 @@ public class MenuUI : MonoBehaviourPunCallbacks
         MouseLook.MouseSens = Mathf.Clamp(float.Parse(IFtext), 50, 750);
         slider.value = float.Parse(IFtext);
     }
-    [SerializeField] string __________________________________________________________;
-    // InGame UI
+    public void SeeRoomsList()
+    {
+        if (roomsOpen == false)
+        {
+            roomsOpen = true;
+            __RoomList.enabled = true;
+        }
+        else
+        {
+            roomsOpen = false;
+            __RoomList.enabled = false;
+        }
+    }
+
+    [Header("In Game")]
 
     [SerializeField] Canvas DeadScreen;
     [SerializeField] Canvas WinScreen;
@@ -54,6 +69,10 @@ public class MenuUI : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("Menu");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("MasterClient Has Left");
+        }
     }
     public void GameEnded()
     {

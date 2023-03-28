@@ -8,6 +8,7 @@ TagManager:
   - Head
   - Bullet
   - Opening
+  - Listing
   layers:
   - Default
   - TransparentFX

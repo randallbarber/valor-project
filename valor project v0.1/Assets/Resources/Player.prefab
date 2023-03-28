@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dead: 0
-  health: 100000
+  health: 1000
 --- !u!114 &2071580335139284154
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,9 +11,16 @@ public class EnemyAgent : MonoBehaviourPun
     private float damage = 10f;
     private float NextTimeToFire = 0f;
 
+    public Transform attackArea;
+
+    GameObject barrier;
+
+    Health health;
+
     GameObject[] openings;
     private void Awake()
     {
+        
         NavAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -38,17 +45,31 @@ public class EnemyAgent : MonoBehaviourPun
     Opening openingSC;
     bool foundPlayer;
     Transform TargetPlayer;
-    bool collidedWithOpening;
     float closestDistanceToPlayer = float.MaxValue;
+
+    float MaxDistance = 2f;
+
     private void Update()
-    {      
+    {
+        if (NavAgent.isStopped == false)
+        {
+            if (Vector3.Distance(agentDestination, transform.position) <= MaxDistance)
+            {
+                NavAgent.isStopped = true;
+            }
+        }
+        else
+        { 
+            if (Vector3.Distance(agentDestination, transform.position) >= MaxDistance)
+            {
+                NavAgent.isStopped = false;
+            }
+        }
         if (TargetPlayer)
         {
             agentDestination = TargetPlayer.position;
         }
-
-            NavAgent.destination = agentDestination;
-        if (openingSC == true && foundPlayer == false)
+        if (barrier && foundPlayer == false)
         {
             if (openingSC.dead == true)
             {
@@ -65,19 +86,24 @@ public class EnemyAgent : MonoBehaviourPun
                 }
             }
         }
+        NavAgent.destination = agentDestination;
     }
     private void OnTriggerStay(Collider other)
     {
-        Health health = other.GetComponent<Health>();
+            health = other.GetComponent<Health>();
         if (health && Time.time >= NextTimeToFire)
         {
             NextTimeToFire = Time.time + 1f;
             health.TakeDamage(damage);
         }
 
-        openingSC = other.GetComponent<Opening>();
-        if (openingSC && Time.time >= NextTimeToFire)
+        if (barrier == false)
         {
+            openingSC = other.GetComponent<Opening>();
+        }
+        if (openingSC && Time.time >= NextTimeToFire && foundPlayer == false)
+        {
+            barrier = openingSC.gameObject;
             NextTimeToFire = Time.time + 1f;
             openingSC.TakeDamage(damage);
         }

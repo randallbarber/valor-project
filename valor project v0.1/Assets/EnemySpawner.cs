@@ -25,8 +25,9 @@ public class EnemySpawner : MonoBehaviourPunCallbacks
    
     public void RoundBegin()
     {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
         round += 1;
-        NumberOfEnemies += 1;
+        NumberOfEnemies += 5;
         animatorRound.Play("roundCounter");
         label.text = "Round " + round.ToString();
         SpawnEnemies();
@@ -75,6 +76,7 @@ public class EnemySpawner : MonoBehaviourPunCallbacks
             timerCanvas.enabled = true;
             timerOn = true;
             timeLeft = intermissionTime;
+            PhotonNetwork.CurrentRoom.IsOpen = true;
             StartCoroutine(intermission());
         }
     }
