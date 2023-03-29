@@ -29,7 +29,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1799020190193458724}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1799020189690168437
 GameObject:
@@ -160,6 +160,8 @@ Transform:
   - {fileID: 2269214057924020460}
   - {fileID: 1799020189880044421}
   - {fileID: 1799020189690168436}
+  - {fileID: 8865605723133232684}
+  - {fileID: 3060964182172569659}
   - {fileID: 1799020189347488059}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -191,6 +193,8 @@ MonoBehaviour:
   gunPOS: {fileID: 2269214057924020460}
   idlePOS: {x: 0.329, y: -0.3729999, z: 0.665}
   ADSPOS: {x: 0, y: -0.2679999, z: 0.444}
+  recoilTR: {fileID: 8865605723133232684}
+  AimRecoilTR: {fileID: 3060964182172569659}
   lineStart: {fileID: 1799020189808172102}
   impact: {fileID: 5231154789652598663, guid: 58af690e950722d41aad3f95c0df8fe1, type: 3}
   HitSound: {fileID: 8593543981772916808, guid: 9e287a754c11b3e4593de89e268437b6, type: 3}
@@ -5224,6 +5228,68 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &6179192871803515096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8865605723133232684}
+  m_Layer: 7
+  m_Name: RecoilTR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8865605723133232684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6179192871803515096}
+  m_LocalRotation: {x: -0.0061423373, y: 0.7070801, z: -0.006142341, w: 0.7070801}
+  m_LocalPosition: {x: 0.329, y: -0.3736, z: 0.5714}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1799020190193458724}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -0.995}
+--- !u!1 &6810561497738024244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3060964182172569659}
+  m_Layer: 7
+  m_Name: AimRecoilTR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3060964182172569659
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6810561497738024244}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.2679999, z: 0.3993}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1799020190193458724}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1799020190111837959
 PrefabInstance:
   m_ObjectHideFlags: 0

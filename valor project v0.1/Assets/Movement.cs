@@ -48,7 +48,7 @@ public class Movement : MonoBehaviourPun
 
             movementController.Move(move * speed * Time.deltaTime);//movement
             // animations
-            if (Input.GetAxis("Vertical") != 0 && GunController != null || Input.GetAxis("Horizontal") != 0 && GunController != null)
+            if (Input.GetAxis("Vertical") != 0 && GunController != null || Input.GetAxis("Horizontal") != 0 && GunController != null) // walking
             {
                 if (GunController.aiming == false)
                 {
@@ -65,7 +65,8 @@ public class Movement : MonoBehaviourPun
                         Sprinting = false;
                         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 70, 5 * Time.deltaTime);
                         speed = 8f;
-                        animator.SetBool("recoilToWalk", true);
+                        //animator.SetBool("recoilToIdle", false);
+                        //animator.SetBool("recoilToWalk", true);
                         animator.SetBool("IsSprinting", false);
                         animator.SetBool("IsWalking", true);
                     }
@@ -74,13 +75,15 @@ public class Movement : MonoBehaviourPun
                 else // if aiming
                 {
                     speed = 4f;
-                    animator.SetBool("recoilToWalk", false);
+                    //animator.SetBool("recoilToWalk", false);
+                    //animator.SetBool("recoilToIdle", true);
                     animator.SetBool("IsWalking", false);
                 }
             }
-            else if (GunController != null) // walking 
+            else if (GunController != null) // idle 
             {
-                    animator.SetBool("recoilToWalk", false);
+                    //animator.SetBool("recoilToWalk", false);
+                    //animator.SetBool("recoilToIdle", true);
                     animator.SetBool("IsWalking", false);
                     animator.SetBool("IsSprinting", false);
             }

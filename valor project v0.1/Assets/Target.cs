@@ -72,6 +72,6 @@ public class Target : MonoBehaviour
 
         moneyHandler.addMoney(amount);
         enemySpawner.EnemyKilled();
-        //Destroy(gameObject, 5f);
+        Destroy(gameObject, 5f);
     }
 }

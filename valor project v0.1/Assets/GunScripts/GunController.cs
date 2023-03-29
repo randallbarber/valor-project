@@ -17,13 +17,14 @@ public class GunController : MonoBehaviourPun
     [SerializeField] float AdsFov = 50f;
     [SerializeField] float IdleFov = 70f;
     float NextTimeToFire = 0f;
-    bool Reloading;
     int ClipSize;
 
     LayerMask HitApplicable;
     [SerializeField] Transform gunPOS;
     [SerializeField] Vector3 idlePOS;
     [SerializeField] Vector3 ADSPOS;
+    [SerializeField] Transform recoilTR;
+    [SerializeField] Transform AimRecoilTR;
     [SerializeField] Transform lineStart;
 
     [SerializeField] GameObject impact;
@@ -56,7 +57,7 @@ public class GunController : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
-            if (Input.GetButton("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && Reloading == false && ClipSize > 0)
+            if (Input.GetButton("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0)
             {
                 NextTimeToFire = Time.time + 1f / FireRate;
                 ClipSize -= 1;
@@ -70,7 +71,7 @@ public class GunController : MonoBehaviourPun
             {
                 photonView.RPC("_IsShooting", RpcTarget.Others, false);
             }
-            if (Input.GetButton("Fire2") && movement.Sprinting == false && Reloading == false)
+            if (Input.GetButton("Fire2") && movement.Sprinting == false)
             {
                 photonView.RPC("RPC_UpdateAim", RpcTarget.All, true, ADSPOS, AdsFov);
             }
@@ -104,7 +105,9 @@ public class GunController : MonoBehaviourPun
     {
         RaycastHit hit;
 
-        animator.Play("recoil", 0, 0f);
+        //animator.Play("recoil", 0, 0f);
+        StartCoroutine(PlayRecoil());
+
         muzzleFlash.Play();
 
         gunshotclone = Instantiate(gunshotSound, cam.transform.position, cam.transform.rotation);
@@ -140,6 +143,37 @@ public class GunController : MonoBehaviourPun
             {
                 hit.rigidbody.AddForce(-hit.normal*Force);
             }
+        }
+    }
+    IEnumerator PlayRecoil()
+    {
+        if (aiming == false)
+        {
+            float time = 0f;
+            Vector3 startPosition = gunPOS.localPosition;
+            Vector3 RecoilPosition = recoilTR.localPosition;
+            while (time < 1)
+            {
+                gunPOS.localPosition = Vector3.Lerp(startPosition, RecoilPosition, time);
+                time += Time.deltaTime / 0.07f;
+
+                yield return null;
+            }
+            gunPOS.localPosition = recoilTR.localPosition;
+        }
+        else
+        {
+            float time = 0f;
+            Vector3 startPosition = gunPOS.localPosition;
+            Vector3 RecoilPosition = AimRecoilTR.localPosition;
+            while (time < 1)
+            {
+                gunPOS.localPosition = Vector3.Lerp(startPosition, RecoilPosition, time);
+                time += Time.deltaTime / 0.07f;
+
+                yield return null;
+            }
+            gunPOS.localPosition = AimRecoilTR.localPosition;
         }
     }
     Vector3 GetShootingDirection()
