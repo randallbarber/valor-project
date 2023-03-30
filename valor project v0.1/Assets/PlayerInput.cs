@@ -4,6 +4,7 @@ using Photon.Pun;
 
 public class PlayerInput : MonoBehaviourPun
 {
+    // Remember must be layer pickable item
     [SerializeField] Camera cam;
     [SerializeField] LayerMask PickableItem;
     

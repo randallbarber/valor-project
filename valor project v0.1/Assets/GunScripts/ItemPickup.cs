@@ -18,7 +18,7 @@ public class ItemPickup : MonoBehaviourPun
     bool isGrounded;
     bool holdingGun;
 
-    private void Awake()
+    private void Start()
     {
         cam = Camera.main.gameObject.transform;
         SC = gameObject.GetComponent<GunController>();
@@ -51,6 +51,7 @@ public class ItemPickup : MonoBehaviourPun
             animator.enabled = true;
             SC.enabled = true;
             collisionDetector.enabled = false;
+            transform.rotation = cam.rotation;
         }
         else
         {

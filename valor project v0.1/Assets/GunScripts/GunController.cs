@@ -16,6 +16,7 @@ public class GunController : MonoBehaviourPun
     [SerializeField] float AdsSpeed = 5f;
     [SerializeField] float AdsFov = 50f;
     [SerializeField] float IdleFov = 70f;
+    bool recoilActivate;
     float NextTimeToFire = 0f;
     int ClipSize;
 
@@ -23,8 +24,6 @@ public class GunController : MonoBehaviourPun
     [SerializeField] Transform gunPOS;
     [SerializeField] Vector3 idlePOS;
     [SerializeField] Vector3 ADSPOS;
-    [SerializeField] Transform recoilTR;
-    [SerializeField] Transform AimRecoilTR;
     [SerializeField] Transform lineStart;
 
     [SerializeField] GameObject impact;
@@ -79,12 +78,17 @@ public class GunController : MonoBehaviourPun
             {
                 photonView.RPC("RPC_UpdateAim", RpcTarget.All, false, idlePOS, IdleFov);
             }
-            if (Input.GetButton("Reload") && movement.Sprinting == false && aiming == false)
+            if (Input.GetButtonDown("Reload") && movement.Sprinting == false && aiming == false)
             {
                 animator.Play("Reloading");
                 reloadSound.Play();
                 ClipSize = MagSize;
                 NextTimeToFire = Time.time + 1f;
+            }
+            if (recoilActivate)
+            {
+                Vector3 RecoilPosition = new Vector3(0f, 0f, -0.05f);
+                gunPOS.localPosition = Vector3.Lerp(gunPOS.localPosition, gunPOS.localPosition + RecoilPosition, 15f * Time.deltaTime);
             }
         }
     }
@@ -105,7 +109,6 @@ public class GunController : MonoBehaviourPun
     {
         RaycastHit hit;
 
-        //animator.Play("recoil", 0, 0f);
         StartCoroutine(PlayRecoil());
 
         muzzleFlash.Play();
@@ -147,34 +150,9 @@ public class GunController : MonoBehaviourPun
     }
     IEnumerator PlayRecoil()
     {
-        if (aiming == false)
-        {
-            float time = 0f;
-            Vector3 startPosition = gunPOS.localPosition;
-            Vector3 RecoilPosition = recoilTR.localPosition;
-            while (time < 1)
-            {
-                gunPOS.localPosition = Vector3.Lerp(startPosition, RecoilPosition, time);
-                time += Time.deltaTime / 0.07f;
-
-                yield return null;
-            }
-            gunPOS.localPosition = recoilTR.localPosition;
-        }
-        else
-        {
-            float time = 0f;
-            Vector3 startPosition = gunPOS.localPosition;
-            Vector3 RecoilPosition = AimRecoilTR.localPosition;
-            while (time < 1)
-            {
-                gunPOS.localPosition = Vector3.Lerp(startPosition, RecoilPosition, time);
-                time += Time.deltaTime / 0.07f;
-
-                yield return null;
-            }
-            gunPOS.localPosition = AimRecoilTR.localPosition;
-        }
+        recoilActivate = true;
+        yield return new WaitForSeconds(0.1f);
+        recoilActivate = false;
     }
     Vector3 GetShootingDirection()
     {

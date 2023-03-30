@@ -241,7 +241,6 @@ MonoBehaviour:
   inputField: {fileID: 891778963}
   slider: {fileID: 893856110}
   __RoomList: {fileID: 1304407043}
-  __________________________________________________________: ___________________________________________________________________
   DeadScreen: {fileID: 0}
   WinScreen: {fileID: 0}
   InGameGUI: {fileID: 0}
@@ -709,7 +708,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 285, y: -350}
   m_SizeDelta: {x: 500, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &236878565
@@ -3590,7 +3589,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 312, y: -351}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1304407040
