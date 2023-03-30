@@ -29,7 +29,7 @@ public class ItemPickup : MonoBehaviourPun
 
     public void Pickup()
     {
-        int targetPlayerID = cam.GetComponent<PhotonView>().ViewID;
+        int targetPlayerID = cam.GetComponentInChildren<PhotonView>().ViewID;
         photonView.RPC("RPC_SetParent", RpcTarget.AllBuffered, targetPlayerID, true);
         photonView.RequestOwnership();
         movement.SetController();
