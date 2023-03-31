@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class sway : MonoBehaviour
+public class sway : MonoBehaviourPun
 {
-
-
     //public MovementScript mover;
-
     [Header("Sway")]
     public float step = 0.01f;
     public float maxStepDistance = 0.06f;
@@ -34,12 +32,15 @@ public class sway : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetInput();
+        if (photonView.IsMine)
+        {
+            GetInput();
 
-        Sway();
-        SwayRotation();
+            Sway();
+            SwayRotation();
 
-        CompositePositionRotation();
+            CompositePositionRotation();
+        }
     }
 
 
