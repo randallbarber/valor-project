@@ -5,8 +5,7 @@ using Photon.Pun;
 
 public class VendingMachine : MonoBehaviour
 {
-    [SerializeField] bool pistol;
-    [SerializeField] bool shotgun;
+    [SerializeField] bool PumpShotgun;
     [SerializeField] bool m16;
     [SerializeField] bool m9b;
     
@@ -19,6 +18,10 @@ public class VendingMachine : MonoBehaviour
         if (m9b == true)
         {
             PhotonNetwork.Instantiate("m9berretaController", transform.position + transform.forward, Quaternion.identity);
+        }
+        if (PumpShotgun)
+        {
+            PhotonNetwork.Instantiate("pumpShotgunController", transform.position + transform.forward, Quaternion.identity);
         }
     }
 }

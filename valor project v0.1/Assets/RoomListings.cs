@@ -15,8 +15,8 @@ public class RoomListings : MonoBehaviourPunCallbacks
         foreach (RoomInfo roomInfo in roomList)
         {
             GameObject NewRoom = Instantiate(roomListingPrefab, GameObject.Find("Content").transform);
-            NewRoom.GetComponent<Room>()._RoomName.text = roomInfo.Name;
-            NewRoom.GetComponent<Room>()._playerCount.text = roomInfo.PlayerCount.ToString() + "/" + roomInfo.MaxPlayers.ToString();
+            NewRoom.GetComponent<A_Room_Listing>()._RoomName.text = roomInfo.Name;
+            NewRoom.GetComponent<A_Room_Listing>()._playerCount.text = roomInfo.PlayerCount.ToString() + "/" + roomInfo.MaxPlayers.ToString();
         }
     }
 }

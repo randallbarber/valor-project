@@ -179,8 +179,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiming: 0
+  fullAuto: 1
+  semiAuto: 0
+  shotgun: 0
+  HasSlide: 0
   damage: 15
   headshotDamage: 20
+  reloadTime: 1
   range: 100
   FireRate: 7.5
   FireSpread: 0.05
@@ -191,15 +196,19 @@ MonoBehaviour:
   AdsFov: 50
   IdleFov: 70
   gunPOS: {fileID: 2269214057924020460}
+  SlidePOS: {fileID: 0}
+  lineStart: {fileID: 1799020189808172102}
+  RecoilPosition: {x: 0, y: 0, z: -0.025}
   idlePOS: {x: 0.329, y: -0.3729999, z: 0.665}
   ADSPOS: {x: 0, y: -0.2679999, z: 0.444}
-  lineStart: {fileID: 1799020189808172102}
+  idleSlidePOS: {x: 0, y: 0, z: 0}
   impact: {fileID: 5231154789652598663, guid: 58af690e950722d41aad3f95c0df8fe1, type: 3}
   HitSound: {fileID: 8593543981772916808, guid: 9e287a754c11b3e4593de89e268437b6, type: 3}
   headShotSound: {fileID: 0}
   gunshotSound: {fileID: 8239068352059058350, guid: b3375567a0a06bc4c9f00a79a9362592, type: 3}
   line: {fileID: 7065470326106498292, guid: 26422403c4822ab43b990b5ad3bb5b31, type: 3}
   muzzleFlash: {fileID: 1799020190372277238}
+  serverMSG: {fileID: 7751273112313844543, guid: 99e86d89a645ae449b0bb41552684227, type: 3}
 --- !u!114 &7803140226776103512
 MonoBehaviour:
   m_ObjectHideFlags: 0

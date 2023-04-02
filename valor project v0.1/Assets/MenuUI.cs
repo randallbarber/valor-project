@@ -12,8 +12,12 @@ public class MenuUI : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField inputField;
     [SerializeField] Slider slider;
     [SerializeField] Canvas __RoomList;
+    [SerializeField] Canvas ModeSelection;
+    [SerializeField] Canvas CreateSelection;
     bool settingsOpen;
     bool roomsOpen;
+    bool modesOpen;
+    bool createSelOpen;
     public void QuitGame()
     {
         Application.Quit();
@@ -54,6 +58,32 @@ public class MenuUI : MonoBehaviourPunCallbacks
             __RoomList.enabled = false;
         }
     }
+    public void SeeModes()
+    {
+        if (modesOpen == false)
+        {
+            modesOpen = true;
+            ModeSelection.enabled = true;
+        }
+        else
+        {
+            modesOpen = false;
+            ModeSelection.enabled = false;
+        }
+    }
+    public void SeeCreateSettingsSelection()
+    {
+        if (createSelOpen == false)
+        {
+            createSelOpen = true;
+            CreateSelection.enabled = true;
+        }
+        else
+        {
+            createSelOpen = false;
+            CreateSelection.enabled = false;
+        }
+    }
 
     [Header("In Game")]
 
@@ -74,13 +104,10 @@ public class MenuUI : MonoBehaviourPunCallbacks
             Debug.Log("MasterClient Has Left");
         }
     }
-    public void GameEnded()
+    public void PlayerKilled()
     {
-            movementSC.enabled = false;
-            MouseLookSC.enabled = false;
-            InGameGUI.enabled = false;
 
-            Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Confined;
     }
     public void OpenMenu()
     {

@@ -24,10 +24,10 @@ public class PlayerInput : MonoBehaviourPun
     Animator repairProgress;
     private void Start()
     {
-        playercount = GameObject.Find("GameController").GetComponent<PlayerCount>();
+        //playercount = GameObject.Find("GameController").GetComponent<PlayerCount>();
         menuUI = GameObject.Find("GameUI").GetComponent<MenuUI>();
-        RepairCanvas = menuUI.transform.Find("RepairCanvas").GetComponent<Canvas>();
-        repairProgress = RepairCanvas.GetComponentInChildren<Animator>();
+        //RepairCanvas = menuUI.transform.Find("RepairCanvas").GetComponent<Canvas>();
+        //repairProgress = RepairCanvas.GetComponentInChildren<Animator>();
     }
     void Update()
     {
@@ -105,7 +105,10 @@ public class PlayerInput : MonoBehaviourPun
             }
             else
             {
-                RepairCanvas.enabled = false;
+                if (RepairCanvas)
+                {
+                    RepairCanvas.enabled = false;
+                }
             }
         }
     }
