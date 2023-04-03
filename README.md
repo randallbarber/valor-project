@@ -1,4 +1,28 @@
 # valor-project
+## v0.4 4/2/23
+**LOTS ADDED**
+- pvp mode
+- usernames
+- respawns
+- m16, m9, mp5 all added and works great however mp5 recoil is not perfectly adjusted
+- new map (more to come)
+- server messages: player kills, player joins/leaves
+
+**Game is now perfectly playable with gameplay loop!!!**
+
+**to fix**
+- sounds aren't replicated to other clients
+- lag on networking possibly due to code
+- zombie mode is all hold until pvp is working well with more content
+
+**whats needed**
+- maps
+- more guns / unlockable guns
+- stats
+- player models
+- game modes: first to x amount of kills, king of the hill, capture the flag
+- teams?
+
 ## v0.2 3/27/23
 
 **added/fixed**
