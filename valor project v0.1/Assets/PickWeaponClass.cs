@@ -32,6 +32,14 @@ public class PickWeaponClass : MonoBehaviourPun
     {
         ClassCanvas.enabled = false;
         Cursor.lockState = CursorLockMode.Locked;
+        GameObject GunClone = PhotonNetwork.Instantiate("mp5Controller", Vector3.zero, Quaternion.identity);
+        ItemPickup pickup = GunClone.GetComponent<ItemPickup>();
+        pickup.Pickup();
+    }
+    public void MarksmanClassPicked()
+    {
+        ClassCanvas.enabled = false;
+        Cursor.lockState = CursorLockMode.Locked;
         GameObject GunClone = PhotonNetwork.Instantiate("m9berretaController", Vector3.zero, Quaternion.identity);
         ItemPickup pickup = GunClone.GetComponent<ItemPickup>();
         pickup.Pickup();
