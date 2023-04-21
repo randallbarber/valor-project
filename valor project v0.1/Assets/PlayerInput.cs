@@ -4,30 +4,16 @@ using Photon.Pun;
 
 public class PlayerInput : MonoBehaviourPun
 {
-    // Remember must be layer pickable item
     [SerializeField] Camera cam;
     [SerializeField] LayerMask PickableItem;
     
     float range = 10f;
-    float repairRange = 3f;
-    float repairTime = 3f;
-    float repairHealthAmount = 100f;
     bool HoldingGun = false;
-    bool readyedUp;
 
-    Coroutine holdRepairCoroutine;
-
-    PlayerCount playercount;
-    Opening opening;
     MenuUI menuUI;
-    Canvas RepairCanvas;
-    Animator repairProgress;
     private void Start()
     {
-        //playercount = GameObject.Find("GameController").GetComponent<PlayerCount>();
         menuUI = GameObject.Find("GameUI").GetComponent<MenuUI>();
-        //RepairCanvas = menuUI.transform.Find("RepairCanvas").GetComponent<Canvas>();
-        //repairProgress = RepairCanvas.GetComponentInChildren<Animator>();
     }
     void Update()
     {
@@ -70,60 +56,6 @@ public class PlayerInput : MonoBehaviourPun
                     }
                 }
             }
-            if (Input.GetButtonDown("Repair"))
-            {
-                RaycastHit hit;
-                if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, repairRange))
-                {
-                    opening = hit.transform.GetComponent<Opening>();
-                    if (opening)
-                    {
-                        holdRepairCoroutine = StartCoroutine(HoldRepair());
-                        repairProgress.Play("repairProgress");
-                    }
-                }
-            }
-            if (Input.GetButtonUp("Repair"))
-            {
-                StopCoroutine(holdRepairCoroutine);
-                repairProgress.Play("Default");
-            }
-
-            if (Input.GetButtonDown("ReadyUp") && readyedUp == false)
-            {
-                readyedUp = true;
-                int ID = playercount.photonView.ViewID;
-                photonView.RPC("playerReadyedUp", RpcTarget.AllBuffered, ID);
-            }
-            RaycastHit Barrierhit;
-            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out Barrierhit, repairRange))
-            {
-                if (Barrierhit.transform.tag == "Opening")
-                {
-                    RepairCanvas.enabled = true;
-                }
-            }
-            else
-            {
-                if (RepairCanvas)
-                {
-                    RepairCanvas.enabled = false;
-                }
-            }
         }
-    }
-
-    IEnumerator HoldRepair()
-    {
-        yield return new WaitForSeconds(repairTime);
-        Debug.Log("repaired");
-        opening.RepairHealth(repairHealthAmount);
-    }
-    [PunRPC]
-    void playerReadyedUp(int PVID)
-    {
-        PhotonView PV = PhotonView.Find(PVID);
-        playercount = PV.gameObject.GetComponent<PlayerCount>();
-        playercount.PlayerReadyUp();
     }
 }

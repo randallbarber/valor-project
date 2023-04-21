@@ -13,6 +13,7 @@ public class GunController : MonoBehaviourPun
     [SerializeField] bool shotgun;
     [SerializeField] bool HasSlide;
     [Header("Specs")]
+    [SerializeField] float recoiltime = 15f;
     [SerializeField] float damage = 10f;
     [SerializeField] float headshotDamage = 20f;
     [SerializeField] float reloadTime = 2f;
@@ -30,6 +31,7 @@ public class GunController : MonoBehaviourPun
     bool recoilActivate;
     float NextTimeToFire = 0f;
     int ClipSize;
+    float CHTime = 50f;
 
     LayerMask HitApplicable;
 
@@ -42,11 +44,13 @@ public class GunController : MonoBehaviourPun
     [SerializeField] Vector3 idlePOS;
     [SerializeField] Vector3 ADSPOS;
     [SerializeField] Vector3 idleSlidePOS;
+    [SerializeField] Vector3 SlideRecoilPosition = new Vector3(0.9f, 0f, 0f);
     [Header("Effects/Sounds")]
     [SerializeField] GameObject impact;
+    [SerializeField] GameObject hitDamage;
     [SerializeField] GameObject HitSound;
     [SerializeField] GameObject headShotSound;
-    [SerializeField] GameObject gunshotSound;
+    [SerializeField] string GunShotName;
     [SerializeField] TrailRenderer line;
     [SerializeField] ParticleSystem muzzleFlash;
     [SerializeField] GameObject serverMSG;
@@ -62,6 +66,11 @@ public class GunController : MonoBehaviourPun
     Transform contentView;
     PlayerRoomInfo localRoomInfo;
 
+    Image top;
+    Image bottom;
+    Image right;
+    Image left;
+
     private void Awake()
     {
         ClipSize = MagSize;
@@ -73,6 +82,10 @@ public class GunController : MonoBehaviourPun
         animator = gameObject.GetComponent<Animator>();
         reloadSound = gameObject.GetComponent<AudioSource>();
         localRoomInfo = GameObject.Find("PlayerRoomInfo").GetComponent<PlayerRoomInfo>();
+        top = GameObject.Find("top CH").GetComponent<Image>();
+        bottom = GameObject.Find("bottom CH").GetComponent<Image>();
+        right = GameObject.Find("right CH").GetComponent<Image>();
+        left = GameObject.Find("left CH").GetComponent<Image>();
     }
     private void OnEnable()
     {
@@ -89,14 +102,7 @@ public class GunController : MonoBehaviourPun
             {
                 if (Input.GetButton("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0)
                 {
-                    NextTimeToFire = Time.time + 1f / FireRate;
-                    ClipSize -= 1;
-                    clipText.text = ClipSize + "/" + MagSize;
-
-                    StartCoroutine(PlayRecoil());
-                    muzzleFlash.Play();
-                    gunshotclone = Instantiate(gunshotSound, cam.transform.position, cam.transform.rotation);
-                    Destroy(gunshotclone, 1f);
+                    FireShot();
                     CreateBullet();
                 }
             }
@@ -104,14 +110,7 @@ public class GunController : MonoBehaviourPun
             {
                 if (Input.GetButtonDown("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0)
                 {
-                    NextTimeToFire = Time.time + 1f / FireRate;
-                    ClipSize -= 1;
-                    clipText.text = ClipSize + "/" + MagSize;
-
-                    StartCoroutine(PlayRecoil());
-                    muzzleFlash.Play();
-                    gunshotclone = Instantiate(gunshotSound, cam.transform.position, cam.transform.rotation);
-                    Destroy(gunshotclone, 1f);
+                    FireShot();
                     CreateBullet();
                 }
             }
@@ -119,14 +118,7 @@ public class GunController : MonoBehaviourPun
             {
                 if (Input.GetButtonDown("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0)
                 {
-                    NextTimeToFire = Time.time + 1f / FireRate;
-                    ClipSize -= 1;
-                    clipText.text = ClipSize + "/" + MagSize;
-
-                    StartCoroutine(PlayRecoil());
-                    muzzleFlash.Play();
-                    gunshotclone = Instantiate(gunshotSound, cam.transform.position, cam.transform.rotation);
-                    Destroy(gunshotclone, 1f);
+                    FireShot();
                     CreateBullet();
                     CreateBullet();
                     CreateBullet();
@@ -148,7 +140,7 @@ public class GunController : MonoBehaviourPun
                 }
                 crosshair.CrossFadeColor(Color.clear, 0.75f, true, true);
             }
-            else
+            else if (gunPOS.localPosition != idlePOS)
             {
                 aiming = false;
                 gunPOS.localPosition = Vector3.Lerp(gunPOS.localPosition, idlePOS, AdsSpeed * Time.deltaTime);
@@ -169,17 +161,40 @@ public class GunController : MonoBehaviourPun
             }
             if (recoilActivate)
             {
-                
-                Vector3 SlideRecoilPosition = new Vector3(0.9f, 0f, 0f);
-                gunPOS.localPosition = Vector3.Lerp(gunPOS.localPosition, gunPOS.localPosition + RecoilPosition, 15f * Time.deltaTime);
+                gunPOS.localPosition = Vector3.Lerp(gunPOS.localPosition, gunPOS.localPosition + RecoilPosition, recoiltime * Time.deltaTime);
                 if (HasSlide)
                 {
-                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, SlidePOS.localPosition + SlideRecoilPosition, 15f * Time.deltaTime);
+                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, SlidePOS.localPosition + SlideRecoilPosition, recoiltime * Time.deltaTime);
                 }
+            }
+            else
+            { 
+
+                cam.transform.parent.transform.localRotation = Quaternion.Lerp(cam.transform.parent.transform.localRotation, ToQ, 1f);
+
+            }
+            if (recoilActivate)
+            {
+                Vector3 tarVERT = new Vector3(0f, 5f, 0f);
+                Vector3 tarHORZ = new Vector3(5f, 0f, 0f);
+                top.transform.localPosition = Vector3.Lerp(top.transform.localPosition, top.transform.localPosition + tarVERT, CHTime * Time.deltaTime);
+                top.transform.localPosition = new Vector3(0f, Mathf.Clamp(top.transform.localPosition.y, 0, 100), 0f);
+                right.transform.localPosition = Vector3.Lerp(right.transform.localPosition, right.transform.localPosition + tarHORZ, CHTime * Time.deltaTime);
+                right.transform.localPosition = new Vector3(Mathf.Clamp(right.transform.localPosition.x, 0, 100), 0f, 0f);
+                bottom.transform.localPosition = Vector3.Lerp(bottom.transform.localPosition, bottom.transform.localPosition - tarVERT, CHTime * Time.deltaTime);
+                bottom.transform.localPosition = new Vector3(0f, Mathf.Clamp(bottom.transform.localPosition.y, -100, 0), 0f);
+                left.transform.localPosition = Vector3.Lerp(left.transform.localPosition, left.transform.localPosition - tarHORZ, CHTime * Time.deltaTime);
+                left.transform.localPosition = new Vector3(Mathf.Clamp(left.transform.localPosition.x, -100, 0), 0f, 0f);
+            }
+            else if (top.transform.localPosition != Vector3.zero)
+            {
+                top.transform.localPosition = Vector3.Lerp(top.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
+                right.transform.localPosition = Vector3.Lerp(right.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
+                bottom.transform.localPosition = Vector3.Lerp(bottom.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
+                left.transform.localPosition = Vector3.Lerp(left.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
             }
         }
     }
-    GameObject gunshotclone;
     void CreateBullet()
     {
         RaycastHit hit;
@@ -209,8 +224,12 @@ public class GunController : MonoBehaviourPun
                         Destroy(HitSoundClone, 1f);
                         photonView.RPC("RPC_TarPly_TakeDamage", RpcTarget.All, TarPlyID, false, localID);
                     }
-                    GameObject impactGO = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal), clonedFolder.transform);
-                    Destroy(impactGO, 2f);
+                GameObject impactClone = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal), clonedFolder.transform);
+                Destroy(impactClone, 2f);
+
+                GameObject hitDamageClone = Instantiate(hitDamage, hit.point - cam.transform.forward/2, Quaternion.LookRotation(cam.transform.forward), clonedFolder.transform);
+                TMP_Text DamageText = hitDamageClone.GetComponentInChildren<TMP_Text>();
+                DamageText.text = damage.ToString();
 
                 if (enemyHealth.dead == true)
                 {
@@ -228,7 +247,11 @@ public class GunController : MonoBehaviourPun
                 hit.rigidbody.AddForce(-hit.normal*Force);
             }
         }
+
     }
+
+    // METHODS //
+
     IEnumerator DelayBetweenKills()
     {
         msgSent = true;
@@ -238,7 +261,8 @@ public class GunController : MonoBehaviourPun
     IEnumerator PlayRecoil()
     {
         recoilActivate = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.09f);
+        RecoilPosition = Vector3.zero;
         recoilActivate = false;
     }
     Vector3 GetShootingDirection()
@@ -263,6 +287,25 @@ public class GunController : MonoBehaviourPun
         direction.Normalize();
         return direction;
     }
+    Quaternion ToQ = Quaternion.identity;
+    void FireShot()
+    {
+        NextTimeToFire = Time.time + 1f / FireRate;
+        ClipSize -= 1;
+        clipText.text = ClipSize + "/" + MagSize;
+
+        ToQ = cam.transform.parent.transform.localRotation;
+        cam.transform.parent.transform.localRotation = Quaternion.Euler(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0f);
+
+        RecoilPosition += new Vector3(Random.Range(-0.025f, 0.025f), 0f, 0f);
+
+        StartCoroutine(PlayRecoil());
+        PhotonNetwork.Instantiate(GunShotName, cam.transform.position, cam.transform.rotation);
+        muzzleFlash.Play();
+    }
+
+    // RPC //
+
     [PunRPC]
     void SendServerMessage(string Killer, string Killed)
     {

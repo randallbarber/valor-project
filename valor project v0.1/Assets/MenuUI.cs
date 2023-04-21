@@ -111,14 +111,14 @@ public class MenuUI : MonoBehaviourPunCallbacks
     }
     public void OpenMenu()
     {
-        if (MenuOpened == false && DeadScreen.enabled == false && WinScreen.enabled == false)
+        if (MenuOpened == false)
         {
             MenuOpened = true;
             PauseMenu.enabled = true;
             Cursor.lockState = CursorLockMode.Confined;
             InGameGUI.enabled = false;
         }
-        else if (DeadScreen.enabled == false && WinScreen.enabled == false)
+        else
         {
             MenuOpened = false;
             PauseMenu.enabled = false;

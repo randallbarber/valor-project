@@ -50,6 +50,7 @@ MonoBehaviour:
   - PlayerReadyUp
   - RPC_HealthRepaired
   - SendServerMessage
+  - SendServerMsg
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -25,7 +25,7 @@ public class ItemPickup : MonoBehaviourPun
         animator = gameObject.GetComponent<Animator>();
         groundCheck = transform.Find("GroundCheck");
 
-        int targetPlayerID = cam.GetComponentInChildren<PhotonView>().ViewID;
+        int targetPlayerID = cam.Find("WeaponHolder").GetComponent<PhotonView>().ViewID;
         photonView.RPC("RPC_SetParent", RpcTarget.AllBuffered, targetPlayerID, true);
         photonView.RequestOwnership();
         movement.SetController();

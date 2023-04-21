@@ -8,7 +8,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
 {
     [SerializeField] Canvas canvas;
     [SerializeField] Canvas ErrorCanvas;
-    [SerializeField] TMP_Text textLabel;
+    [SerializeField] Canvas LoadingConnection;
     [SerializeField] TMP_Text ErrorTextLabel;
 
     private void Start()
@@ -22,7 +22,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         ErrorCanvas.enabled = false;
-        textLabel.enabled = false;
+        LoadingConnection.enabled = false;
         canvas.enabled = true;
     }
     public override void OnDisconnected(DisconnectCause cause)

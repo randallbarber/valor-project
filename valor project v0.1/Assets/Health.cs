@@ -9,6 +9,8 @@ public class Health : MonoBehaviourPun
     [SerializeField] float health;
     int killerID;
     bool firedFunction;
+    bool TookDamage = false;
+    float timeToFire;
 
     Canvas DeadGUI;
     MenuUI menuUI;
@@ -20,7 +22,7 @@ public class Health : MonoBehaviourPun
     private void Start()
     {
         cam = Camera.main;
-        spawnPlayers = GameObject.Find("SpawnPlayers").GetComponent<SpawnPlayersPVP>();
+        spawnPlayers = GameObject.Find("AllClients").GetComponent<SpawnPlayersPVP>();
         DeadGUI = GameObject.Find("GameUI/Game Over").GetComponent<Canvas>();
         menuUI = GameObject.Find("GameUI").GetComponent<MenuUI>();
         animator = GameObject.Find("GameUI/HurtOverlay/Panel").GetComponent<Animator>();
@@ -33,6 +35,7 @@ public class Health : MonoBehaviourPun
     public void TakeDamage(float amount)
     {
         health -= amount;
+        
         if (health <= 0f && dead == false)
         {
             dead = true;

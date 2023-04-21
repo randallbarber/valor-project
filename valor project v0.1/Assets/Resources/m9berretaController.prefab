@@ -769,6 +769,7 @@ MonoBehaviour:
   semiAuto: 1
   shotgun: 0
   HasSlide: 1
+  recoiltime: 15
   damage: 10
   headshotDamage: 20
   reloadTime: 2
@@ -788,10 +789,12 @@ MonoBehaviour:
   idlePOS: {x: 0.337, y: -0.212, z: 0.611}
   ADSPOS: {x: 0, y: -0.104, z: 0.611}
   idleSlidePOS: {x: 2.4571822, y: 2.6855745, z: 0}
+  SlideRecoilPosition: {x: 0.9, y: 0, z: 0}
   impact: {fileID: 5231154789652598663, guid: 58af690e950722d41aad3f95c0df8fe1, type: 3}
+  hitDamage: {fileID: 3295849202559800175, guid: 6340594b358af624680ef5390330792b, type: 3}
   HitSound: {fileID: 8593543981772916808, guid: 9e287a754c11b3e4593de89e268437b6, type: 3}
   headShotSound: {fileID: 0}
-  gunshotSound: {fileID: 2371849371905249711, guid: b22e2997260d6054e8bc64feede74fde, type: 3}
+  GunShotName: pistolSound
   line: {fileID: 7065470326106498292, guid: 26422403c4822ab43b990b5ad3bb5b31, type: 3}
   muzzleFlash: {fileID: 5540487547706116108}
   serverMSG: {fileID: 7751273112313844543, guid: 99e86d89a645ae449b0bb41552684227, type: 3}

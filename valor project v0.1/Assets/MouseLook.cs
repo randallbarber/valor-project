@@ -9,11 +9,6 @@ public class MouseLook : MonoBehaviourPun
 
     float xRotation = 0f;
 
-    void Start()
-    {
-        //Cursor.lockState = CursorLockMode.Locked;
-    }
-
     void Update()
     {
         if (photonView.IsMine)

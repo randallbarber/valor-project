@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8239068352059058352}
   - component: {fileID: 8239068352059058351}
+  - component: {fileID: -8575662627250725694}
   - component: {fileID: 1033379041726741329}
   m_Layer: 0
   m_Name: riflesound
@@ -129,6 +130,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-8575662627250725694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8239068352059058350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa392948599d95d4284aa4f98ede718c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToKillThySelf: 1
 --- !u!114 &1033379041726741329
 MonoBehaviour:
   m_ObjectHideFlags: 0

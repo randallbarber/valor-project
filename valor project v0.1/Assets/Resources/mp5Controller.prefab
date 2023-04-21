@@ -601,11 +601,12 @@ MonoBehaviour:
   semiAuto: 0
   shotgun: 0
   HasSlide: 1
+  recoiltime: 50
   damage: 5
   headshotDamage: 8
   reloadTime: 2
   range: 100
-  FireRate: 10
+  FireRate: 9
   FireSpread: 0.1
   AimSpread: 0.05
   MagSize: 30
@@ -616,14 +617,16 @@ MonoBehaviour:
   gunPOS: {fileID: 270258453396777886}
   SlidePOS: {fileID: 4107613014104893339}
   lineStart: {fileID: 2764956112852257964}
-  RecoilPosition: {x: 0, y: 0, z: -0.01}
+  RecoilPosition: {x: 0, y: 0, z: -0.005}
   idlePOS: {x: 0.305, y: -0.227, z: 0.413}
-  ADSPOS: {x: 0, y: -0.152, z: 0.288}
+  ADSPOS: {x: 0, y: -0.145, z: 0.288}
   idleSlidePOS: {x: 0.84560573, y: 0.6314133, z: -0.19715817}
+  SlideRecoilPosition: {x: -0.2, y: 0, z: 0}
   impact: {fileID: 5231154789652598663, guid: 58af690e950722d41aad3f95c0df8fe1, type: 3}
+  hitDamage: {fileID: 3295849202559800175, guid: 6340594b358af624680ef5390330792b, type: 3}
   HitSound: {fileID: 8593543981772916808, guid: 9e287a754c11b3e4593de89e268437b6, type: 3}
   headShotSound: {fileID: 0}
-  gunshotSound: {fileID: 500218358674454190, guid: 63c1fcb1402c5bb49a7e7d2573e50ec3, type: 3}
+  GunShotName: smgSound
   line: {fileID: 7065470326106498292, guid: 26422403c4822ab43b990b5ad3bb5b31, type: 3}
   muzzleFlash: {fileID: 2764956112428830015}
   serverMSG: {fileID: 7751273112313844543, guid: 99e86d89a645ae449b0bb41552684227, type: 3}
@@ -675,7 +678,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
