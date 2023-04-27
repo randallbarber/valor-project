@@ -36,12 +36,13 @@ public class GunController : MonoBehaviourPun
     LayerMask HitApplicable;
 
     [Header("Transforms")]
-    [SerializeField] Transform gunPOS;
+    [SerializeField] Transform gunModel;
     [SerializeField] Transform SlidePOS;
     [SerializeField] Transform lineStart;
     [Header("Positions")]
     [SerializeField] Vector3 RecoilPosition = new Vector3(0f, 0f, -0.05f);
     [SerializeField] Vector3 idlePOS;
+    [SerializeField] Vector3 idleROT;
     [SerializeField] Vector3 ADSPOS;
     [SerializeField] Vector3 idleSlidePOS;
     [SerializeField] Vector3 SlideRecoilPosition = new Vector3(0.9f, 0f, 0f);
@@ -79,7 +80,7 @@ public class GunController : MonoBehaviourPun
         clipText = GameObject.Find("clipAmount").GetComponent<TMP_Text>();
         HitApplicable = LayerMask.GetMask("Ground", "Enemy", "Default");
         clonedFolder = GameObject.Find("ClonedFolder");
-        animator = gameObject.GetComponent<Animator>();
+        animator = gunModel.GetComponent<Animator>();
         reloadSound = gameObject.GetComponent<AudioSource>();
         localRoomInfo = GameObject.Find("PlayerRoomInfo").GetComponent<PlayerRoomInfo>();
         top = GameObject.Find("top CH").GetComponent<Image>();
@@ -132,7 +133,7 @@ public class GunController : MonoBehaviourPun
             if (Input.GetButton("Fire2") && movement.Sprinting == false)
             {
                 aiming = true;
-                gunPOS.localPosition = Vector3.Lerp(gunPOS.localPosition, ADSPOS, AdsSpeed * Time.deltaTime);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, ADSPOS, AdsSpeed * Time.deltaTime);
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, AdsFov, AdsSpeed * Time.deltaTime);
                 if (HasSlide)
                 {
@@ -140,10 +141,11 @@ public class GunController : MonoBehaviourPun
                 }
                 crosshair.CrossFadeColor(Color.clear, 0.75f, true, true);
             }
-            else if (gunPOS.localPosition != idlePOS)
+            else if (transform.localPosition != idlePOS)
             {
                 aiming = false;
-                gunPOS.localPosition = Vector3.Lerp(gunPOS.localPosition, idlePOS, AdsSpeed * Time.deltaTime);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, idlePOS, AdsSpeed * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(idleROT), AdsSpeed * Time.deltaTime);
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, IdleFov, AdsSpeed * Time.deltaTime);
                 if (HasSlide)
                 {
@@ -161,17 +163,11 @@ public class GunController : MonoBehaviourPun
             }
             if (recoilActivate)
             {
-                gunPOS.localPosition = Vector3.Lerp(gunPOS.localPosition, gunPOS.localPosition + RecoilPosition, recoiltime * Time.deltaTime);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + RecoilPosition, recoiltime * Time.deltaTime);
                 if (HasSlide)
                 {
                     SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, SlidePOS.localPosition + SlideRecoilPosition, recoiltime * Time.deltaTime);
                 }
-            }
-            else
-            { 
-
-                cam.transform.parent.transform.localRotation = Quaternion.Lerp(cam.transform.parent.transform.localRotation, ToQ, 1f);
-
             }
             if (recoilActivate)
             {
@@ -262,7 +258,6 @@ public class GunController : MonoBehaviourPun
     {
         recoilActivate = true;
         yield return new WaitForSeconds(0.09f);
-        RecoilPosition = Vector3.zero;
         recoilActivate = false;
     }
     Vector3 GetShootingDirection()
@@ -287,17 +282,11 @@ public class GunController : MonoBehaviourPun
         direction.Normalize();
         return direction;
     }
-    Quaternion ToQ = Quaternion.identity;
     void FireShot()
     {
         NextTimeToFire = Time.time + 1f / FireRate;
         ClipSize -= 1;
         clipText.text = ClipSize + "/" + MagSize;
-
-        ToQ = cam.transform.parent.transform.localRotation;
-        cam.transform.parent.transform.localRotation = Quaternion.Euler(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0f);
-
-        RecoilPosition += new Vector3(Random.Range(-0.025f, 0.025f), 0f, 0f);
 
         StartCoroutine(PlayRecoil());
         PhotonNetwork.Instantiate(GunShotName, cam.transform.position, cam.transform.rotation);

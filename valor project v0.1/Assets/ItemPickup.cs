@@ -6,6 +6,7 @@ public class ItemPickup : MonoBehaviourPun
     [SerializeField] Collider collisionDetector;
     [SerializeField] float groundDistance = 0.2f;
     [SerializeField] LayerMask GroundMask;
+    [SerializeField] Transform gunModel;
 
     Transform cam;
     GunController SC;
@@ -22,10 +23,10 @@ public class ItemPickup : MonoBehaviourPun
         cam = Camera.main.gameObject.transform;
         SC = gameObject.GetComponent<GunController>();
         movement = cam.GetComponentInParent<Movement>();
-        animator = gameObject.GetComponent<Animator>();
+        animator = gunModel.GetComponent<Animator>();
         groundCheck = transform.Find("GroundCheck");
 
-        int targetPlayerID = cam.Find("WeaponHolder").GetComponent<PhotonView>().ViewID;
+        int targetPlayerID = GameObject.Find("ViewModel").GetComponent<PhotonView>().ViewID;
         photonView.RPC("RPC_SetParent", RpcTarget.AllBuffered, targetPlayerID, true);
         photonView.RequestOwnership();
         movement.SetController();
@@ -41,7 +42,7 @@ public class ItemPickup : MonoBehaviourPun
         cam = Camera.main.gameObject.transform;
         SC = gameObject.GetComponent<GunController>();
         movement = cam.GetComponentInParent<Movement>();
-        animator = gameObject.GetComponent<Animator>();
+        animator = gunModel.GetComponent<Animator>();
         groundCheck = transform.Find("GroundCheck");
 
         if (Pickup)
@@ -53,7 +54,8 @@ public class ItemPickup : MonoBehaviourPun
             animator.enabled = true;
             SC.enabled = true;
             collisionDetector.enabled = false;
-            transform.rotation = cam.rotation;
+            transform.localRotation = Quaternion.identity;
+            transform.localPosition = Vector3.zero;
         }
         else
         {
