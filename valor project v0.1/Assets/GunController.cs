@@ -14,6 +14,7 @@ public class GunController : MonoBehaviourPun
     [SerializeField] bool HasSlide;
     [Header("Specs")]
     [SerializeField] float recoiltime = 15f;
+    [SerializeField] float SlideRecoiltime = 15f;
     [SerializeField] float damage = 10f;
     [SerializeField] float headshotDamage = 20f;
     [SerializeField] float reloadTime = 2f;
@@ -26,6 +27,8 @@ public class GunController : MonoBehaviourPun
     [SerializeField] float AdsSpeed = 5f;
     [SerializeField] float AdsFov = 50f;
     [SerializeField] float IdleFov = 70f;
+    [SerializeField] float RecoilRotSpread = 2f;
+    [SerializeField] float AimRecoilRotSpread = 1f;
 
     bool msgSent;
     bool recoilActivate;
@@ -41,6 +44,7 @@ public class GunController : MonoBehaviourPun
     [SerializeField] Transform lineStart;
     [Header("Positions")]
     [SerializeField] Vector3 RecoilPosition = new Vector3(0f, 0f, -0.05f);
+    Vector3 RecoilRotation;
     [SerializeField] Vector3 idlePOS;
     [SerializeField] Vector3 idleROT;
     [SerializeField] Vector3 ADSPOS;
@@ -134,10 +138,11 @@ public class GunController : MonoBehaviourPun
             {
                 aiming = true;
                 transform.localPosition = Vector3.Lerp(transform.localPosition, ADSPOS, AdsSpeed * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(idleROT), AdsSpeed * Time.deltaTime);
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, AdsFov, AdsSpeed * Time.deltaTime);
                 if (HasSlide)
                 {
-                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, idleSlidePOS, 8f * Time.deltaTime);
+                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, idleSlidePOS, SlideRecoiltime * Time.deltaTime);
                 }
                 crosshair.CrossFadeColor(Color.clear, 0.75f, true, true);
             }
@@ -149,7 +154,7 @@ public class GunController : MonoBehaviourPun
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, IdleFov, AdsSpeed * Time.deltaTime);
                 if (HasSlide)
                 {
-                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, idleSlidePOS, 8f * Time.deltaTime);
+                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, idleSlidePOS, SlideRecoiltime * Time.deltaTime);
                 }
                 crosshair.CrossFadeColor(Color.white, 0.25f, true, true);
             }
@@ -164,9 +169,10 @@ public class GunController : MonoBehaviourPun
             if (recoilActivate)
             {
                 transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + RecoilPosition, recoiltime * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, transform.localRotation * Quaternion.Euler(RecoilRotation), recoiltime * Time.deltaTime);
                 if (HasSlide)
                 {
-                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, SlidePOS.localPosition + SlideRecoilPosition, recoiltime * Time.deltaTime);
+                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, SlidePOS.localPosition + SlideRecoilPosition, SlideRecoiltime * Time.deltaTime);
                 }
             }
             if (recoilActivate)
@@ -287,7 +293,14 @@ public class GunController : MonoBehaviourPun
         NextTimeToFire = Time.time + 1f / FireRate;
         ClipSize -= 1;
         clipText.text = ClipSize + "/" + MagSize;
-
+        if (!aiming)
+        {
+            RecoilRotation = new Vector3(Random.Range(-RecoilRotSpread, RecoilRotSpread), Random.Range(-RecoilRotSpread, RecoilRotSpread), Random.Range(-RecoilRotSpread, RecoilRotSpread));
+        }
+        else
+        {
+            RecoilRotation = new Vector3(Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread));
+        }
         StartCoroutine(PlayRecoil());
         PhotonNetwork.Instantiate(GunShotName, cam.transform.position, cam.transform.rotation);
         muzzleFlash.Play();

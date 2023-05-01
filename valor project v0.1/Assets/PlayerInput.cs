@@ -5,7 +5,7 @@ using Photon.Pun;
 public class PlayerInput : MonoBehaviourPun
 {
     [SerializeField] Camera cam;
-    [SerializeField] LayerMask PickableItem;
+    [SerializeField] LayerMask ItemLayer;
     
     float range = 10f;
     bool HoldingGun = false;
@@ -40,7 +40,7 @@ public class PlayerInput : MonoBehaviourPun
                 if (HoldingGun == false)
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range, PickableItem))
+                    if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range, ItemLayer))
                     {
                         ItemPickup gun = hit.transform.GetComponentInParent<ItemPickup>();
                         if (gun != null)
