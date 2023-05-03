@@ -14,6 +14,9 @@ public class ItemPickup : MonoBehaviourPun
     Animator animator;
     Transform groundCheck;
 
+    Transform LHT;
+    Transform RHT;
+
     float gravity = -9.81f;
     Vector3 velocity;
     bool isGrounded;
@@ -26,7 +29,10 @@ public class ItemPickup : MonoBehaviourPun
         animator = gunModel.GetComponent<Animator>();
         groundCheck = transform.Find("GroundCheck");
 
-        int targetPlayerID = GameObject.Find("ViewModel").GetComponent<PhotonView>().ViewID;
+        LHT = GetComponentInChildren<Animator>().transform.Find("left_hand_target");
+        RHT = GetComponentInChildren<Animator>().transform.Find("right_hand_target");
+
+        int targetPlayerID = cam.transform.GetComponentInChildren<SetIK_Targets>().transform.GetComponent<PhotonView>().ViewID;
         photonView.RPC("RPC_SetParent", RpcTarget.AllBuffered, targetPlayerID, true);
         photonView.RequestOwnership();
         movement.SetController();
@@ -45,17 +51,18 @@ public class ItemPickup : MonoBehaviourPun
         animator = gunModel.GetComponent<Animator>();
         groundCheck = transform.Find("GroundCheck");
 
+        LHT = GetComponentInChildren<Animator>().transform.Find("left_hand_target");
+        RHT = GetComponentInChildren<Animator>().transform.Find("right_hand_target");
         if (Pickup)
         {
             PhotonView tarPlyPV = PhotonView.Find(targetPLYR);
             Transform _parent = tarPlyPV.gameObject.transform;
             transform.SetParent(_parent);
+            _parent.GetComponent<SetIK_Targets>().SetTargets(LHT, RHT);
             holdingGun = true;
             animator.enabled = true;
             SC.enabled = true;
             collisionDetector.enabled = false;
-            transform.localRotation = Quaternion.identity;
-            transform.localPosition = Vector3.zero;
         }
         else
         {

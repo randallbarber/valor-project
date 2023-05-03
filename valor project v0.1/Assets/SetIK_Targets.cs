@@ -9,10 +9,10 @@ public class SetIK_Targets : MonoBehaviour
     [SerializeField] TwoBoneIKConstraint rightHandIK;
     [SerializeField] RigBuilder rigBuilder;
 
-    private void OnTransformChildrenChanged()
+    public void SetTargets(Transform LHT, Transform RHT)
     {
-        leftHandIk.data.target = GameObject.Find("left_hand_target").transform;
-        rightHandIK.data.target = GameObject.Find("right_hand_target").transform;
+        leftHandIk.data.target = LHT;
+        rightHandIK.data.target = RHT;
         rigBuilder.Build();
     }
 }

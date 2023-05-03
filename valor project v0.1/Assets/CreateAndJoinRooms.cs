@@ -11,6 +11,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField createInput;
     [SerializeField] TMP_InputField joinInput;
     bool pvpMode;
+    bool _testMode;
 
     // ZOMBIE MODE//
     public void MatchMake()
@@ -37,6 +38,13 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomOrCreateRoom();
     }
 
+    // TEST // 
+    public void TestMode()
+    {
+        _testMode = true;
+        PhotonNetwork.CreateRoom("test");
+    }
+
     // JOIN ROOM WITH CORRECT SETTINGS/MODE //
     public override void OnJoinedRoom()
     {
@@ -46,9 +54,9 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.LoadLevel("Map1");
             }
-            else
+            if (_testMode)
             {
-                PhotonNetwork.LoadLevel("Game");
+                PhotonNetwork.LoadLevel("TestMap");
             }
         }
         else

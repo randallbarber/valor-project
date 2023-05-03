@@ -42,8 +42,9 @@ public class GunController : MonoBehaviourPun
     [SerializeField] Transform gunModel;
     [SerializeField] Transform SlidePOS;
     [SerializeField] Transform lineStart;
-    [Header("Positions")]
+    [Header("Vectors")]
     [SerializeField] Vector3 RecoilPosition = new Vector3(0f, 0f, -0.05f);
+    [SerializeField] Vector3 CamRecoil = new Vector3(-5f, 0f, 0);
     Vector3 RecoilRotation;
     [SerializeField] Vector3 idlePOS;
     [SerializeField] Vector3 idleROT;
@@ -70,6 +71,7 @@ public class GunController : MonoBehaviourPun
     Image crosshair;
     Transform contentView;
     PlayerRoomInfo localRoomInfo;
+    GameObject CamLerps;
 
     Image top;
     Image bottom;
@@ -97,7 +99,16 @@ public class GunController : MonoBehaviourPun
         NextTimeToFire = Time.time + 0.5f;
         clipText.text = ClipSize + "/" + MagSize;
         cam = GetComponentInParent<Camera>();
+        CamLerps = cam.transform.parent.gameObject;
         movement = GetComponentInParent<Movement>();
+
+        transform.localRotation = Quaternion.identity;
+        transform.localPosition = Vector3.zero;
+        if (!photonView.IsMine)
+        {
+            transform.localPosition = idlePOS;
+            transform.localRotation = Quaternion.Euler(idleROT);
+        }
     }
     private void Update()
     {
@@ -174,6 +185,7 @@ public class GunController : MonoBehaviourPun
                 {
                     SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, SlidePOS.localPosition + SlideRecoilPosition, SlideRecoiltime * Time.deltaTime);
                 }
+                CamLerps.transform.localRotation = Quaternion.Lerp(CamLerps.transform.localRotation, CamLerps.transform.localRotation * Quaternion.Euler(CamRecoil), recoiltime * Time.deltaTime);
             }
             if (recoilActivate)
             {
@@ -207,6 +219,15 @@ public class GunController : MonoBehaviourPun
             int TrailID = trailGO.GetComponent<PhotonView>().ViewID;
             photonView.RPC("RPC_SpawnTrail", RpcTarget.All, TrailID, hit.point);
 
+            TargetPractice Target = hit.transform.GetComponent<TargetPractice>();
+            if (Target)
+            {
+                Target.TakeDamage(damage);
+                GameObject HitSoundClone = Instantiate(HitSound, cam.transform.position, cam.transform.rotation, clonedFolder.transform);
+                Destroy(HitSoundClone, 1f);
+                GameObject impactClone = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal), clonedFolder.transform);
+                Destroy(impactClone, 2f);
+            }
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 Health enemyHealth = hit.collider.GetComponent<Health>();
@@ -214,20 +235,19 @@ public class GunController : MonoBehaviourPun
                 int TarPlyID = TarPly_PV.ViewID;
                 int PlyActrN = TarPly_PV.OwnerActorNr;
                 int localID = photonView.ViewID;
-                    if (hit.collider.tag == "Head")
+
+                if (hit.collider.tag == "Head")
                     {
                     GameObject HitSoundClone = Instantiate(HitSound, cam.transform.position, cam.transform.rotation, clonedFolder.transform);
                         Destroy(HitSoundClone, 1f);
                         photonView.RPC("RPC_TarPly_TakeDamage", RpcTarget.All, TarPlyID, true, localID);
-                    }
-                    else
-                    {
-                    GameObject HitSoundClone = Instantiate(HitSound, cam.transform.position, cam.transform.rotation, clonedFolder.transform);
-                        Destroy(HitSoundClone, 1f);
-                        photonView.RPC("RPC_TarPly_TakeDamage", RpcTarget.All, TarPlyID, false, localID);
-                    }
-                GameObject impactClone = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal), clonedFolder.transform);
-                Destroy(impactClone, 2f);
+                }
+                else
+                {
+                GameObject HitSoundClone = Instantiate(HitSound, cam.transform.position, cam.transform.rotation, clonedFolder.transform);
+                    Destroy(HitSoundClone, 1f);
+                    photonView.RPC("RPC_TarPly_TakeDamage", RpcTarget.All, TarPlyID, false, localID);
+                }
 
                 GameObject hitDamageClone = Instantiate(hitDamage, hit.point - cam.transform.forward/2, Quaternion.LookRotation(cam.transform.forward), clonedFolder.transform);
                 TMP_Text DamageText = hitDamageClone.GetComponentInChildren<TMP_Text>();

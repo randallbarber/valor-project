@@ -282,7 +282,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 04d799612bda0b1418b411d463fbb646, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -378,7 +378,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 942dd602459eba144800a9b76fa42d16, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1088,7 +1088,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8034969500383283232}
   m_Layer: 2
-  m_Name: LeanController
+  m_Name: Cam Lerping
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2127,8 +2127,8 @@ GameObject:
   - component: {fileID: 2687851655344205302}
   - component: {fileID: 2687851655344205300}
   - component: {fileID: 2687851655344205301}
-  - component: {fileID: 6498480081511704005}
   - component: {fileID: 889438206794257853}
+  - component: {fileID: 6498480081511704005}
   m_Layer: 2
   m_Name: ViewModel
   m_TagString: Untagged
@@ -2190,6 +2190,21 @@ MonoBehaviour:
   - m_Rig: {fileID: 2771994761315433047}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &889438206794257853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2687851655344205303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bc6d7591a634694fbd4af405f246698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHandIk: {fileID: 4756498539441766833}
+  rightHandIK: {fileID: 4941669856366918265}
+  rigBuilder: {fileID: 2687851655344205301}
 --- !u!114 &6498480081511704005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2212,21 +2227,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &889438206794257853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2687851655344205303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bc6d7591a634694fbd4af405f246698, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftHandIk: {fileID: 4756498539441766833}
-  rightHandIK: {fileID: 4941669856366918265}
-  rigBuilder: {fileID: 2687851655344205301}
 --- !u!1 &2717210266581187081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2776,6 +2776,8 @@ GameObject:
   - component: {fileID: 4217967859951178990}
   - component: {fileID: 607714351019452385}
   - component: {fileID: 4735671593093122210}
+  - component: {fileID: 3337249925965901863}
+  - component: {fileID: 7934053985660995982}
   m_Layer: 0
   m_Name: Dummy
   m_TagString: Untagged
@@ -2840,6 +2842,50 @@ MonoBehaviour:
   - m_Rig: {fileID: 893866322555716251}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &3337249925965901863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3585687493889478228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 7934053985660995982}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &7934053985660995982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3585687493889478228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 1
+    Name: IsJogging
+  m_SynchronizeLayers:
+  - SynchronizeType: 1
+    LayerIndex: 0
 --- !u!1 &3605954672481806766
 GameObject:
   m_ObjectHideFlags: 0
@@ -3033,7 +3079,6 @@ GameObject:
   - component: {fileID: 4053515179795199793}
   - component: {fileID: 4053515179795199806}
   - component: {fileID: 4053515179795199807}
-  - component: {fileID: 4053515179795199804}
   m_Layer: 0
   m_Name: aim_target
   m_TagString: Untagged
@@ -3071,7 +3116,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4053515179795199805}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3106,19 +3151,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4053515179795199804
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4053515179795199805}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4191206397047341481
 GameObject:
   m_ObjectHideFlags: 0

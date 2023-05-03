@@ -9,7 +9,6 @@ public class Health : MonoBehaviourPun
     [SerializeField] float health;
     int killerID;
     bool firedFunction;
-    bool TookDamage = false;
     float timeToFire;
 
     Canvas DeadGUI;
