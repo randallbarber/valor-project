@@ -29,12 +29,15 @@ public class GunController : MonoBehaviourPun
     [SerializeField] float IdleFov = 70f;
     [SerializeField] float RecoilRotSpread = 2f;
     [SerializeField] float AimRecoilRotSpread = 1f;
+    [SerializeField] float Radius = 1f;
 
     bool msgSent;
     bool recoilActivate;
     float NextTimeToFire = 0f;
     int ClipSize;
     float CHTime = 50f;
+
+    bool gunIsBlocked;
 
     LayerMask HitApplicable;
 
@@ -156,8 +159,12 @@ public class GunController : MonoBehaviourPun
                     SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, idleSlidePOS, SlideRecoiltime * Time.deltaTime);
                 }
                 crosshair.CrossFadeColor(Color.clear, 0.75f, true, true);
+                top.CrossFadeColor(Color.clear, 0.75f, true, true);
+                left.CrossFadeColor(Color.clear, 0.75f, true, true);
+                right.CrossFadeColor(Color.clear, 0.75f, true, true);
+                bottom.CrossFadeColor(Color.clear, 0.75f, true, true);
             }
-            else if (transform.localPosition != idlePOS)
+            else if (transform.localPosition != idlePOS && !gunIsBlocked || transform.localRotation != Quaternion.Euler(idleROT) && !gunIsBlocked)
             {
                 aiming = false;
                 transform.localPosition = Vector3.Lerp(transform.localPosition, idlePOS, AdsSpeed * Time.deltaTime);
@@ -168,6 +175,10 @@ public class GunController : MonoBehaviourPun
                     SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, idleSlidePOS, SlideRecoiltime * Time.deltaTime);
                 }
                 crosshair.CrossFadeColor(Color.white, 0.25f, true, true);
+                top.CrossFadeColor(Color.white, 0.25f, true, true);
+                left.CrossFadeColor(Color.white, 0.25f, true, true);
+                right.CrossFadeColor(Color.white, 0.25f, true, true);
+                bottom.CrossFadeColor(Color.white, 0.25f, true, true);
             }
             if (Input.GetButtonDown("Reload") && movement.Sprinting == false && aiming == false)
             {
@@ -206,6 +217,21 @@ public class GunController : MonoBehaviourPun
                 right.transform.localPosition = Vector3.Lerp(right.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
                 bottom.transform.localPosition = Vector3.Lerp(bottom.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
                 left.transform.localPosition = Vector3.Lerp(left.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
+            }
+           // Collider[] cols = Physics.OverlapSphere(lineStart.position, Radius, HitApplicable);
+            //for (int i = 0; i < cols.Length; i++)
+           // {
+                //Debug.Log(cols[i].name);
+            //}
+            if (Physics.CheckSphere(lineStart.position, Radius, HitApplicable))
+            {
+                Debug.Log("touyching");
+                gunIsBlocked = true;
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0f, 90f, 312f), recoiltime * Time.deltaTime);
+            }
+            else
+            {
+                gunIsBlocked = false;
             }
         }
     }

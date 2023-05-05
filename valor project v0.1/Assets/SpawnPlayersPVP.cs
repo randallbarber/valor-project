@@ -16,13 +16,13 @@ public class SpawnPlayersPVP : MonoBehaviourPun
         int SpawnLocation = Random.Range(1, 3);
         if (SpawnLocation == 1)
         {
-            SpawnPOS.x = Random.Range(0f, 34f);
-            SpawnPOS.z = Random.Range(20f, 30f);
+            SpawnPOS.x = Random.Range(0f, 15f);
+            SpawnPOS.z = Random.Range(-20f, -15f);
         }
         if (SpawnLocation == 2)
         {
-            SpawnPOS.x = Random.Range(0f, 34f);
-            SpawnPOS.z = Random.Range(-35f, -25f);
+            SpawnPOS.x = Random.Range(0f, 15f);
+            SpawnPOS.z = Random.Range(15f, 20f);
         }
         PhotonNetwork.Instantiate("Player", SpawnPOS, Quaternion.identity);
         weaponClassChoice.EnableWeaponChoice();

@@ -33,6 +33,7 @@ public class Movement : MonoBehaviourPun
     [SerializeField] AudioSource SlowWalkingSound;
     [SerializeField] AudioSource BreathingSound;
     [SerializeField] AudioSource FastBreathingSound;
+    [SerializeField] AudioSource FastSprintingSound;
 
     GunController GunController;
     Animator animator;
@@ -77,10 +78,6 @@ public class Movement : MonoBehaviourPun
                     BreathingSound.Stop();
                     SlowWalkingSound.Stop();
 
-                    if (!WalkingSound.isPlaying)
-                    {
-                        WalkingSound.Play();
-                    }
                     if (!FastBreathingSound.isPlaying)
                     {
                         FastBreathingSound.Play();
@@ -90,12 +87,22 @@ public class Movement : MonoBehaviourPun
                         Sprinting = true;
                         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 80, 5 * Time.deltaTime);
                         speed = SprintSpeed;
+                        WalkingSound.Stop();
+                        if (!FastSprintingSound.isPlaying)
+                        {
+                            FastSprintingSound.Play();
+                        }
                     }
                     else
                     {
                         Sprinting = false;
                         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 70, 5 * Time.deltaTime);
                         speed = WalkSpeed;
+                        FastSprintingSound.Stop();
+                        if (!WalkingSound.isPlaying)
+                        {
+                            WalkingSound.Play();
+                        }
                     }
                     
                 }
