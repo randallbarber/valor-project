@@ -123,7 +123,7 @@ Transform:
   m_GameObject: {fileID: 1799020190193458728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.0000002, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6039615379502416860}
@@ -152,7 +152,7 @@ MonoBehaviour:
   SlideRecoiltime: 30
   damage: 15
   headshotDamage: 20
-  reloadTime: 1
+  reloadTime: 2.5
   range: 100
   FireRate: 7.5
   FireSpread: 0.05
@@ -165,6 +165,10 @@ MonoBehaviour:
   RecoilRotSpread: 1
   AimRecoilRotSpread: 0.25
   Radius: 0.1
+  mp_IdlePos: {x: -0.566, y: 0.123, z: 0.096}
+  mp_IdleRot: {x: 288.84863, y: 176.33304, z: 168.54633}
+  mp_RecoilPosition: {x: 0.03, y: 0, z: 0}
+  mp_AimPos: {x: -0.539, y: 0.097, z: 0.021}
   gunModel: {fileID: 6039615379502416860}
   SlidePOS: {fileID: 1926962733699346431}
   lineStart: {fileID: 1799020189808172102}
@@ -201,6 +205,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   gunModel: {fileID: 6039615379502416860}
+  LHT: {fileID: 4746216836364839367}
+  RHT: {fileID: 3152893874930534861}
 --- !u!82 &1799020190193458731
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5227,12 +5233,12 @@ Transform:
   m_GameObject: {fileID: 3744971139502303281}
   m_LocalRotation: {x: 0.06041754, y: 0.040172186, z: 0.5522265, w: 0.8305311}
   m_LocalPosition: {x: 0.3527754, y: 0.5377671, z: -0.2409199}
-  m_LocalScale: {x: 4.302135, y: 4.3021336, z: 4.302136}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6039615379502416860}
   m_RootOrder: 19
-  m_LocalEulerAnglesHint: {x: 3.21, y: 7.682, z: 67.456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4269188211401165885
 GameObject:
   m_ObjectHideFlags: 0
@@ -5924,7 +5930,7 @@ GameObject:
   - component: {fileID: 3410579128158354440}
   - component: {fileID: 937503320241035210}
   m_Layer: 7
-  m_Name: Plane.002
+  m_Name: mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5937,9 +5943,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6792010273210420243}
-  m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: -0.05582965}
-  m_LocalScale: {x: 100, y: 100, z: 155.82889}
+  m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.05582965}
+  m_LocalScale: {x: 100, y: 100.000015, z: 155.82887}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6039615379502416860}
@@ -6305,7 +6311,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7759106861653797145}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: efb108ebd1009ad4e932712bbfd99c8a, type: 2}
   m_CullingMode: 0

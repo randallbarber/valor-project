@@ -5,9 +5,7 @@ using Photon.Pun;
 public class PlayerInput : MonoBehaviourPun
 {
     [SerializeField] Camera cam;
-    [SerializeField] LayerMask ItemLayer;
     
-    float range = 10f;
     bool HoldingGun = false;
 
     MenuUI menuUI;
@@ -32,27 +30,6 @@ public class PlayerInput : MonoBehaviourPun
                     if (item)
                     {
                         item.Drop();
-                    }
-                }
-            }
-            if (Input.GetButtonDown("Fire1")) // pickup
-            {
-                if (HoldingGun == false)
-                {
-                    RaycastHit hit;
-                    if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range, ItemLayer))
-                    {
-                        ItemPickup gun = hit.transform.GetComponentInParent<ItemPickup>();
-                        if (gun != null)
-                        {
-                            HoldingGun = true;
-                            gun.Pickup();
-                        }
-                        VendingMachine store = hit.transform.GetComponent<VendingMachine>();
-                        if (store != null)
-                        {
-                            store.Clicked();
-                        }
                     }
                 }
             }

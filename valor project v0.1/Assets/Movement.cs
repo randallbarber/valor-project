@@ -15,13 +15,19 @@ public class Movement : MonoBehaviourPun
     [SerializeField] LayerMask GroundMask;
     float speed;
     bool isGrounded;
+    bool mp_isMoving;
+    bool prev_isMoving;
     Vector3 velocity;
-
+    [Header("Objects")]
+    [SerializeField] GameObject DummyModel;
+    [SerializeField] GameObject MPDummyModel;
     [Header("Transforms")]
-    [SerializeField] Transform LeanController;
+    [SerializeField] Transform camera_lean_target;
+    [SerializeField] Transform model_lean_target;
     [SerializeField] Transform groundCheck;
     [Header("Animators")]
     [SerializeField] Animator PlayerAnimator;
+    [SerializeField] Animator MPlayerAnimator;
     [SerializeField] Animator CamAnimator;
     [Header("Components")]
     [SerializeField] CharacterController movementController;
@@ -36,19 +42,24 @@ public class Movement : MonoBehaviourPun
     [SerializeField] AudioSource FastSprintingSound;
 
     GunController GunController;
-    Animator animator;
+    Animator GunAnimator;
 
     private void Awake()
     {
-        if (photonView.IsMine == false)
+        if (!photonView.IsMine)
         {
             speed = WalkSpeed;
             cam.enabled = false;
             listener.enabled = false;
             gameObject.layer = LayerMask.NameToLayer("Enemy");
+            Destroy(DummyModel);
+            Destroy(CamAnimator.gameObject);
+        }
+        else
+        {
+            Destroy(MPDummyModel);
         }
     }
-
     void Update()
     {
         if (photonView.IsMine)
@@ -57,7 +68,7 @@ public class Movement : MonoBehaviourPun
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, GroundMask);
             if (isGrounded && velocity.y < 0)
             {
-                velocity.y = -2f;
+                velocity.y = 0f;
             }
             // moving
             float x = Input.GetAxis("Horizontal");//a,d
@@ -69,10 +80,11 @@ public class Movement : MonoBehaviourPun
 
             if (Input.GetAxis("Vertical") != 0 && GunController != null || Input.GetAxis("Horizontal") != 0 && GunController != null) // walking
             {
+                PlayerAnimator.SetBool("IsJogging", true);
+                mp_isMoving = true;
                 if (GunController.aiming == false)
                 {
-                    PlayerAnimator.SetBool("IsJogging", true);
-                    animator.SetBool("Walking", true);
+                    GunAnimator.SetBool("Walking", true);
                     CamAnimator.SetBool("Walking", true);
 
                     BreathingSound.Stop();
@@ -85,6 +97,7 @@ public class Movement : MonoBehaviourPun
                     if (Input.GetButton("Sprint")) // sprinting
                     {
                         Sprinting = true;
+                        GunAnimator.SetBool("Sprinting", true);
                         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 80, 5 * Time.deltaTime);
                         speed = SprintSpeed;
                         WalkingSound.Stop();
@@ -96,6 +109,7 @@ public class Movement : MonoBehaviourPun
                     else
                     {
                         Sprinting = false;
+                        GunAnimator.SetBool("Sprinting", false);
                         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 70, 5 * Time.deltaTime);
                         speed = WalkSpeed;
                         FastSprintingSound.Stop();
@@ -104,12 +118,11 @@ public class Movement : MonoBehaviourPun
                             WalkingSound.Play();
                         }
                     }
-                    
                 }
                 else // if aiming
                 {
                     speed = WalkSpeed / 2;
-                    animator.SetBool("Walking", false);
+                    GunAnimator.SetBool("Walking", false);
                     CamAnimator.SetBool("Walking", false);
 
                     FastBreathingSound.Stop();
@@ -127,7 +140,8 @@ public class Movement : MonoBehaviourPun
             else if (GunController != null)
             {
                 PlayerAnimator.SetBool("IsJogging", false);
-                animator.SetBool("Walking", false);
+                mp_isMoving = false;
+                GunAnimator.SetBool("Walking", false);
                 CamAnimator.SetBool("Walking", false);
                 WalkingSound.Stop();
                 FastBreathingSound.Stop();
@@ -146,46 +160,57 @@ public class Movement : MonoBehaviourPun
             velocity.y += gravity * Time.deltaTime;
             movementController.Move(velocity * Time.deltaTime);
 
-            if (Input.GetAxis("Horizontal") > 0)
-            {
-                //right
-            }
-            if (Input.GetAxis("Horizontal") < 0)
-            {
-                //left
-            }
             if (Input.GetButton("LeanRight") || Input.GetButton("LeanLeft"))
             {
-                HeadMesh.enabled = false;
                 if (Input.GetButton("LeanRight"))
                 {
-                    LeanController.transform.localRotation = Quaternion.Lerp(LeanController.transform.localRotation, Quaternion.Euler(0f, 0f, -30f), LeanTime * Time.deltaTime);
+                    camera_lean_target.transform.localRotation = Quaternion.Lerp(camera_lean_target.transform.localRotation, Quaternion.Euler(0f, 0f, -30f), LeanTime * Time.deltaTime);
+                    model_lean_target.transform.localRotation = Quaternion.Lerp(model_lean_target.transform.localRotation, Quaternion.Euler(0f, 0f, -30f), LeanTime * Time.deltaTime);
                 }
                 if (Input.GetButton("LeanLeft"))
                 {
-                    LeanController.transform.localRotation = Quaternion.Lerp(LeanController.transform.localRotation, Quaternion.Euler(0f, 0f, 30f), LeanTime * Time.deltaTime);
+                    camera_lean_target.transform.localRotation = Quaternion.Lerp(camera_lean_target.transform.localRotation, Quaternion.Euler(0f, 0f, 30f), LeanTime * Time.deltaTime);
+                    model_lean_target.transform.localRotation = Quaternion.Lerp(model_lean_target.transform.localRotation, Quaternion.Euler(0f, 0f, 30f), LeanTime * Time.deltaTime);
                 }
             }
             else
             {
-                HeadMesh.enabled = true;
-                LeanController.transform.localRotation = Quaternion.Lerp(LeanController.transform.localRotation, Quaternion.identity, LeanTime * Time.deltaTime);
+                camera_lean_target.transform.localRotation = Quaternion.Lerp(camera_lean_target.transform.localRotation, Quaternion.identity, LeanTime * Time.deltaTime);
+                model_lean_target.transform.localRotation = Quaternion.Lerp(model_lean_target.transform.localRotation, Quaternion.identity, LeanTime * Time.deltaTime);
+            }
+            if (mp_isMoving != prev_isMoving)
+            {
+                if (mp_isMoving)
+                {
+                    photonView.RPC("UpdateMovingStatus", RpcTarget.Others, true);
+                }
+                else
+                {
+                    photonView.RPC("UpdateMovingStatus", RpcTarget.Others, false);
+                }
+                prev_isMoving = mp_isMoving;
+            }
+        }
+        if (!photonView.IsMine)
+        {
+            if (mp_isMoving)
+            {
+                MPlayerAnimator.SetBool("IsJogging", true);
+            }
+            else
+            {
+                MPlayerAnimator.SetBool("IsJogging", false);
             }
         }
     }
     public void SetController()
     {
         GunController = cam.GetComponentInChildren<GunController>();
-        animator = GunController.GetComponentInChildren<Animator>();
+        GunAnimator = GunController.GetComponentInChildren<Animator>();
     }
-    IEnumerator FadeOutAudio(AudioSource audioTrack)
+    [PunRPC]
+    void UpdateMovingStatus(bool TrueOrFalse)
     {
-        float _time = 0f;
-        while (_time < 1f)
-        {
-            audioTrack.volume = Mathf.Lerp(audioTrack.volume, 0f, _time);
-            _time += Time.deltaTime / 1f;
-            yield return null;
-        }
+        mp_isMoving = TrueOrFalse;
     }
 }

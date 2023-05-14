@@ -45,6 +45,10 @@ public class MenuUI : MonoBehaviourPunCallbacks
         MouseLook.MouseSens = Mathf.Clamp(float.Parse(IFtext), 50, 750);
         slider.value = float.Parse(IFtext);
     }
+    public void UpdateVolume(float NewVol)
+    {
+        AudioListener.volume = NewVol;
+    }
     public void SeeRoomsList()
     {
         if (roomsOpen == false)

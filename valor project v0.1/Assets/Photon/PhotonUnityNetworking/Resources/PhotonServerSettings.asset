@@ -51,6 +51,13 @@ MonoBehaviour:
   - RPC_HealthRepaired
   - SendServerMessage
   - SendServerMsg
+  - MP_Animations
+  - SetBool
+  - RPC_PlayRecoil
+  - rpc_CheckIfLoaded
+  - rpc_SetParent
+  - UpdateAim
+  - UpdateMovingStatus
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

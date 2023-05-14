@@ -651,10 +651,16 @@ MonoBehaviour:
   IdleFov: 70
   RecoilRotSpread: 0.5
   AimRecoilRotSpread: 0.1
+  Radius: 0.1
+  mp_IdlePos: {x: 0, y: 0, z: 0}
+  mp_IdleRot: {x: 0, y: 0, z: 0}
+  mp_RecoilPosition: {x: 0, y: 0, z: 0}
+  mp_AimPos: {x: 0, y: 0, z: 0}
   gunModel: {fileID: 270258453396777886}
   SlidePOS: {fileID: 4107613014104893339}
   lineStart: {fileID: 2764956112852257964}
   RecoilPosition: {x: 0, y: 0, z: -0.005}
+  CamRecoil: {x: -1, y: 0, z: 0}
   idlePOS: {x: 0.125, y: -0.196, z: 0.25}
   idleROT: {x: 0, y: -90, z: 0}
   ADSPOS: {x: 0, y: -0.148, z: 0.2451}
@@ -686,6 +692,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   gunModel: {fileID: 270258453396777886}
+  LHT: {fileID: 1064566610897213157}
+  RHT: {fileID: 6310558530155446693}
 --- !u!82 &2764956111804049042
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5710,7 +5718,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2764956112726140079}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.305, y: -0.227, z: 0.413}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

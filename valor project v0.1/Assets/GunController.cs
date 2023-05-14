@@ -29,7 +29,12 @@ public class GunController : MonoBehaviourPun
     [SerializeField] float IdleFov = 70f;
     [SerializeField] float RecoilRotSpread = 2f;
     [SerializeField] float AimRecoilRotSpread = 1f;
-    [SerializeField] float Radius = 1f;
+    [SerializeField] float Radius = 0.1f;
+    [Header("MP")]
+    [SerializeField] Vector3 mp_IdlePos;
+    [SerializeField] Vector3 mp_IdleRot;
+    [SerializeField] Vector3 mp_RecoilPosition;
+    [SerializeField] Vector3 mp_AimPos;
 
     bool msgSent;
     bool recoilActivate;
@@ -38,6 +43,9 @@ public class GunController : MonoBehaviourPun
     float CHTime = 50f;
 
     bool gunIsBlocked;
+
+    bool mp_aiming;
+    bool prev_aiming;
 
     LayerMask HitApplicable;
 
@@ -76,6 +84,8 @@ public class GunController : MonoBehaviourPun
     PlayerRoomInfo localRoomInfo;
     GameObject CamLerps;
 
+    Transform ADS_target;
+
     Image top;
     Image bottom;
     Image right;
@@ -83,35 +93,37 @@ public class GunController : MonoBehaviourPun
 
     private void Awake()
     {
-        ClipSize = MagSize;
-        contentView = GameObject.Find("Content").transform;
-        crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
-        clipText = GameObject.Find("clipAmount").GetComponent<TMP_Text>();
-        HitApplicable = LayerMask.GetMask("Ground", "Enemy", "Default");
-        clonedFolder = GameObject.Find("ClonedFolder");
-        animator = gunModel.GetComponent<Animator>();
-        reloadSound = gameObject.GetComponent<AudioSource>();
-        localRoomInfo = GameObject.Find("PlayerRoomInfo").GetComponent<PlayerRoomInfo>();
-        top = GameObject.Find("top CH").GetComponent<Image>();
-        bottom = GameObject.Find("bottom CH").GetComponent<Image>();
-        right = GameObject.Find("right CH").GetComponent<Image>();
-        left = GameObject.Find("left CH").GetComponent<Image>();
+        if (photonView.IsMine)
+        {
+            ClipSize = MagSize;
+            contentView = GameObject.Find("Content").transform;
+            crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
+            clipText = GameObject.Find("clipAmount").GetComponent<TMP_Text>();
+            HitApplicable = LayerMask.GetMask("Ground", "Enemy", "Default");
+            clonedFolder = GameObject.Find("ClonedFolder");
+            animator = gunModel.GetComponent<Animator>();
+            reloadSound = gameObject.GetComponent<AudioSource>();
+            localRoomInfo = GameObject.Find("PlayerRoomInfo").GetComponent<PlayerRoomInfo>();
+            top = GameObject.Find("top CH").GetComponent<Image>();
+            bottom = GameObject.Find("bottom CH").GetComponent<Image>();
+            right = GameObject.Find("right CH").GetComponent<Image>();
+            left = GameObject.Find("left CH").GetComponent<Image>();
+        }
     }
     private void OnEnable()
     {
-        NextTimeToFire = Time.time + 0.5f;
-        clipText.text = ClipSize + "/" + MagSize;
-        cam = GetComponentInParent<Camera>();
-        CamLerps = cam.transform.parent.gameObject;
-        movement = GetComponentInParent<Movement>();
-
-        transform.localRotation = Quaternion.identity;
-        transform.localPosition = Vector3.zero;
-        if (!photonView.IsMine)
+        if (photonView.IsMine)
         {
-            transform.localPosition = idlePOS;
-            transform.localRotation = Quaternion.Euler(idleROT);
+            NextTimeToFire = Time.time + 0.5f;
+            clipText.text = ClipSize + "/" + MagSize;
+            cam = GetComponentInParent<Camera>();
+            CamLerps = cam.transform.parent.gameObject;
+
+            transform.localRotation = Quaternion.identity;
+            transform.localPosition = Vector3.zero;
         }
+        movement = GetComponentInParent<Movement>();
+        ADS_target = movement.transform.Find("ADS_target");
     }
     private void Update()
     {
@@ -119,7 +131,7 @@ public class GunController : MonoBehaviourPun
         {
             if (fullAuto)
             {
-                if (Input.GetButton("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0)
+                if (Input.GetButton("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0 && !gunIsBlocked)
                 {
                     FireShot();
                     CreateBullet();
@@ -127,7 +139,7 @@ public class GunController : MonoBehaviourPun
             }
             if (semiAuto)
             {
-                if (Input.GetButtonDown("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0)
+                if (Input.GetButtonDown("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0 && !gunIsBlocked)
                 {
                     FireShot();
                     CreateBullet();
@@ -135,7 +147,7 @@ public class GunController : MonoBehaviourPun
             }
             if (shotgun)
             {
-                if (Input.GetButtonDown("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0)
+                if (Input.GetButtonDown("Fire1") && Time.time >= NextTimeToFire && movement.Sprinting == false && ClipSize > 0 && !gunIsBlocked)
                 {
                     FireShot();
                     CreateBullet();
@@ -151,8 +163,11 @@ public class GunController : MonoBehaviourPun
             if (Input.GetButton("Fire2") && movement.Sprinting == false)
             {
                 aiming = true;
+                mp_aiming = true;
+
                 transform.localPosition = Vector3.Lerp(transform.localPosition, ADSPOS, AdsSpeed * Time.deltaTime);
                 transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(idleROT), AdsSpeed * Time.deltaTime);
+
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, AdsFov, AdsSpeed * Time.deltaTime);
                 if (HasSlide)
                 {
@@ -167,8 +182,11 @@ public class GunController : MonoBehaviourPun
             else if (transform.localPosition != idlePOS && !gunIsBlocked || transform.localRotation != Quaternion.Euler(idleROT) && !gunIsBlocked)
             {
                 aiming = false;
+                mp_aiming = false;
+
                 transform.localPosition = Vector3.Lerp(transform.localPosition, idlePOS, AdsSpeed * Time.deltaTime);
                 transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(idleROT), AdsSpeed * Time.deltaTime);
+
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, IdleFov, AdsSpeed * Time.deltaTime);
                 if (HasSlide)
                 {
@@ -182,7 +200,7 @@ public class GunController : MonoBehaviourPun
             }
             if (Input.GetButtonDown("Reload") && movement.Sprinting == false && aiming == false)
             {
-                animator.Play("Reloading");
+                animator.SetTrigger("Reloading");
                 reloadSound.Play();
                 ClipSize = MagSize;
                 clipText.text = ClipSize + "/" + MagSize;
@@ -218,20 +236,54 @@ public class GunController : MonoBehaviourPun
                 bottom.transform.localPosition = Vector3.Lerp(bottom.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
                 left.transform.localPosition = Vector3.Lerp(left.transform.localPosition, Vector3.zero, CHTime/3 * Time.deltaTime);
             }
-           // Collider[] cols = Physics.OverlapSphere(lineStart.position, Radius, HitApplicable);
-            //for (int i = 0; i < cols.Length; i++)
-           // {
-                //Debug.Log(cols[i].name);
-            //}
             if (Physics.CheckSphere(lineStart.position, Radius, HitApplicable))
             {
-                Debug.Log("touyching");
                 gunIsBlocked = true;
                 transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0f, 90f, 312f), recoiltime * Time.deltaTime);
+
             }
             else
             {
                 gunIsBlocked = false;
+            }
+            if (mp_aiming != prev_aiming)
+            {
+                if (mp_aiming)
+                {
+                    photonView.RPC("UpdateAim", RpcTarget.Others, true);
+                }
+                else
+                {
+                    photonView.RPC("UpdateAim", RpcTarget.Others, false);
+                }
+                prev_aiming = mp_aiming;
+            }
+        }
+        if (!photonView.IsMine)
+        {
+            if (HasSlide)
+            {
+                SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, idleSlidePOS, SlideRecoiltime * Time.deltaTime);
+            }
+            if (recoilActivate)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + mp_RecoilPosition, recoiltime * Time.deltaTime);
+                //transform.localRotation = Quaternion.Lerp(transform.localRotation, transform.localRotation * Quaternion.Euler(RecoilRotation), recoiltime * Time.deltaTime);
+                if (HasSlide)
+                {
+                    SlidePOS.localPosition = Vector3.Lerp(SlidePOS.localPosition, SlidePOS.localPosition + SlideRecoilPosition, SlideRecoiltime * Time.deltaTime);
+                }
+            }
+            if (mp_aiming)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, mp_AimPos, AdsSpeed * Time.deltaTime);
+                ADS_target.localRotation = Quaternion.Lerp(ADS_target.localRotation, Quaternion.Euler(0f, 0f, -45f), AdsSpeed * Time.deltaTime);
+            }
+            else if (transform.localPosition != mp_IdlePos)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, mp_IdlePos, AdsSpeed * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(mp_IdleRot), AdsSpeed * Time.deltaTime);
+                ADS_target.localRotation = Quaternion.Lerp(ADS_target.localRotation, Quaternion.Euler(0f, 0f, 0f), AdsSpeed * Time.deltaTime);
             }
         }
     }
@@ -275,9 +327,9 @@ public class GunController : MonoBehaviourPun
                     photonView.RPC("RPC_TarPly_TakeDamage", RpcTarget.All, TarPlyID, false, localID);
                 }
 
-                GameObject hitDamageClone = Instantiate(hitDamage, hit.point - cam.transform.forward/2, Quaternion.LookRotation(cam.transform.forward), clonedFolder.transform);
-                TMP_Text DamageText = hitDamageClone.GetComponentInChildren<TMP_Text>();
-                DamageText.text = damage.ToString();
+                //GameObject hitDamageClone = Instantiate(hitDamage, hit.point - cam.transform.forward/2, Quaternion.LookRotation(cam.transform.forward), clonedFolder.transform);
+                //TMP_Text DamageText = hitDamageClone.GetComponentInChildren<TMP_Text>();
+                //DamageText.text = damage.ToString();
 
                 if (enemyHealth.dead == true)
                 {
@@ -347,12 +399,16 @@ public class GunController : MonoBehaviourPun
         {
             RecoilRotation = new Vector3(Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread));
         }
-        StartCoroutine(PlayRecoil());
+        photonView.RPC("RPC_PlayRecoil", RpcTarget.All);
         PhotonNetwork.Instantiate(GunShotName, cam.transform.position, cam.transform.rotation);
-        muzzleFlash.Play();
     }
 
     // RPC //
+    [PunRPC]
+    void UpdateAim(bool TrueOrFalse)
+    {
+        mp_aiming = TrueOrFalse;
+    }
 
     [PunRPC]
     void SendServerMessage(string Killer, string Killed)
@@ -380,18 +436,6 @@ public class GunController : MonoBehaviourPun
                 health.TakeDamage(damage);
             }
         }
-        Target target = tarPly.transform.GetComponent<Target>();
-        if (target != null)
-        {
-            if (headshot)
-            {
-                target.TakeDamage(headshotDamage);
-            }
-            else
-            {
-                target.TakeDamage(damage);
-            }
-        }
     }
     [PunRPC]
     void RPC_SpawnTrail(int trailID, Vector3 hit)
@@ -399,10 +443,16 @@ public class GunController : MonoBehaviourPun
         TrailRenderer trail = PhotonView.Find(trailID).gameObject.GetComponent<TrailRenderer>();
         StartCoroutine(SpawnTrail(trail, hit));
     }
-        IEnumerator SpawnTrail(TrailRenderer trail, Vector3 hitPoint)
+    [PunRPC]
+    void RPC_PlayRecoil()
+    {
+        muzzleFlash.Play();
+        StartCoroutine(PlayRecoil());
+    }
+    IEnumerator SpawnTrail(TrailRenderer trail, Vector3 hitPoint)
     {
         float time = 0f;
-        Vector3 startPosition = trail.transform.position;
+        Vector3 startPosition = lineStart.position;
         while (time < 1)
         {
             trail.transform.position = Vector3.Lerp(startPosition, hitPoint, time);

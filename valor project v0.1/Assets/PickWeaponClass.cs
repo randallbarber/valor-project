@@ -11,7 +11,6 @@ public class PickWeaponClass : MonoBehaviourPun
         ClassCanvas.enabled = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
-
     public void AssaultClassPicked()
     {
         ClassCanvas.enabled = false;
