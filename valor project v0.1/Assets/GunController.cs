@@ -250,11 +250,11 @@ public class GunController : MonoBehaviourPun
             {
                 if (mp_aiming)
                 {
-                    photonView.RPC("UpdateAim", RpcTarget.Others, true);
+                    photonView.RPC("mp_UpdateAim", RpcTarget.Others, true);
                 }
                 else
                 {
-                    photonView.RPC("UpdateAim", RpcTarget.Others, false);
+                    photonView.RPC("mp_UpdateAim", RpcTarget.Others, false);
                 }
                 prev_aiming = mp_aiming;
             }
@@ -399,13 +399,13 @@ public class GunController : MonoBehaviourPun
         {
             RecoilRotation = new Vector3(Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread));
         }
-        photonView.RPC("RPC_PlayRecoil", RpcTarget.All);
+        photonView.RPC("RPC_mp_fireshot", RpcTarget.All);
         PhotonNetwork.Instantiate(GunShotName, cam.transform.position, cam.transform.rotation);
     }
 
     // RPC //
     [PunRPC]
-    void UpdateAim(bool TrueOrFalse)
+    void mp_UpdateAim(bool TrueOrFalse)
     {
         mp_aiming = TrueOrFalse;
     }
@@ -444,7 +444,7 @@ public class GunController : MonoBehaviourPun
         StartCoroutine(SpawnTrail(trail, hit));
     }
     [PunRPC]
-    void RPC_PlayRecoil()
+    void RPC_mp_fireshot()
     {
         muzzleFlash.Play();
         StartCoroutine(PlayRecoil());

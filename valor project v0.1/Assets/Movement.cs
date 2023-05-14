@@ -12,6 +12,7 @@ public class Movement : MonoBehaviourPun
     [SerializeField] float jumpHeight = 3;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float LeanTime = 5f;
+    [SerializeField] float strafeTime = 8f;
     [SerializeField] LayerMask GroundMask;
     float speed;
     bool isGrounded;
@@ -24,6 +25,7 @@ public class Movement : MonoBehaviourPun
     [Header("Transforms")]
     [SerializeField] Transform camera_lean_target;
     [SerializeField] Transform model_lean_target;
+    [SerializeField] Transform strafe_target;
     [SerializeField] Transform groundCheck;
     [Header("Animators")]
     [SerializeField] Animator PlayerAnimator;
@@ -189,6 +191,21 @@ public class Movement : MonoBehaviourPun
                     photonView.RPC("UpdateMovingStatus", RpcTarget.Others, false);
                 }
                 prev_isMoving = mp_isMoving;
+            }
+            if (Input.GetAxis("Horizontal") != 0)
+            {
+                if (Input.GetAxis("Horizontal") >= 0)
+                {
+                    strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, 70f, 0f), strafeTime * Time.deltaTime);
+                }
+                if (Input.GetAxis("Horizontal") <= 0)
+                {
+                    strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, -70f, 0f), strafeTime * Time.deltaTime);
+                }
+            }
+            else
+            {
+                strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.identity, strafeTime * Time.deltaTime);
             }
         }
         if (!photonView.IsMine)

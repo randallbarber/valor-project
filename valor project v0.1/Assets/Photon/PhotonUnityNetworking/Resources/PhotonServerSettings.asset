@@ -58,6 +58,8 @@ MonoBehaviour:
   - rpc_SetParent
   - UpdateAim
   - UpdateMovingStatus
+  - mp_UpdateAim
+  - RPC_mp_fireshot
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
