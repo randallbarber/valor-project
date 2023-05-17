@@ -6,23 +6,28 @@ using Photon.Pun;
 public class SpawnPlayersPVP : MonoBehaviourPun
 {
     [SerializeField] PickWeaponClass weaponClassChoice;
+    [SerializeField] Transform SpawnArea_1;
+    [SerializeField] Transform SpawnArea_2;
+    [SerializeField] float XRange;
+    [SerializeField] float ZRange;
+    [SerializeField] float Height;
+
     void Start()
     {
         SpawnAPlayer();
     }
     public void SpawnAPlayer()
     {
-        Vector3 SpawnPOS = new Vector3(0, 2, 0);
+        Vector3 SpawnPOS = new Vector3();
+
         int SpawnLocation = Random.Range(1, 3);
         if (SpawnLocation == 1)
         {
-            SpawnPOS.x = Random.Range(0f, 15f);
-            SpawnPOS.z = Random.Range(-20f, -15f);
+            SpawnPOS = SpawnArea_1.position + new Vector3(Random.Range(-XRange, XRange), Height, Random.Range(-ZRange, ZRange));
         }
         if (SpawnLocation == 2)
         {
-            SpawnPOS.x = Random.Range(0f, 15f);
-            SpawnPOS.z = Random.Range(15f, 20f);
+            SpawnPOS = SpawnArea_2.position + new Vector3(Random.Range(-XRange, XRange), Height, Random.Range(-ZRange, ZRange));
         }
         PhotonNetwork.Instantiate("Player", SpawnPOS, Quaternion.identity);
         weaponClassChoice.EnableWeaponChoice();

@@ -62,6 +62,7 @@ public class GunController : MonoBehaviourPun
     [SerializeField] Vector3 ADSPOS;
     [SerializeField] Vector3 idleSlidePOS;
     [SerializeField] Vector3 SlideRecoilPosition = new Vector3(0.9f, 0f, 0f);
+    [SerializeField] Vector3 blockedRot;
     [Header("Effects/Sounds")]
     [SerializeField] GameObject impact;
     [SerializeField] GameObject hitDamage;
@@ -239,8 +240,7 @@ public class GunController : MonoBehaviourPun
             if (Physics.CheckSphere(lineStart.position, Radius, HitApplicable))
             {
                 gunIsBlocked = true;
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0f, 90f, 312f), recoiltime * Time.deltaTime);
-
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(blockedRot), recoiltime * Time.deltaTime);
             }
             else
             {
@@ -400,7 +400,7 @@ public class GunController : MonoBehaviourPun
             RecoilRotation = new Vector3(Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread), Random.Range(-AimRecoilRotSpread, AimRecoilRotSpread));
         }
         photonView.RPC("RPC_mp_fireshot", RpcTarget.All);
-        PhotonNetwork.Instantiate(GunShotName, cam.transform.position, cam.transform.rotation);
+        GameObject soundShot = PhotonNetwork.Instantiate(GunShotName, cam.transform.position, cam.transform.rotation);
     }
 
     // RPC //

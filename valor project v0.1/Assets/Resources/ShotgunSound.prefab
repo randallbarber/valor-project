@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3232453399809149688}
   - component: {fileID: 6869975195341920990}
   - component: {fileID: -1922294352094165622}
+  - component: {fileID: 1894541924739110435}
   - component: {fileID: 3214884667149547078}
   m_Layer: 0
   m_Name: ShotgunSound
@@ -143,6 +144,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToKillThySelf: 1
+--- !u!114 &1894541924739110435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4344119003515346990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff427343ba0ef3a4784e5865f5a1f350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioShot: {fileID: 6869975195341920990}
 --- !u!114 &3214884667149547078
 MonoBehaviour:
   m_ObjectHideFlags: 0

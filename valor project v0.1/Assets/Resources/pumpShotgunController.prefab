@@ -296,7 +296,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3718471094153406278}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &987592032365689699
 MeshFilter:
@@ -348,6 +348,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &991957757536427617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1590373066826842289}
+  m_Layer: 0
+  m_Name: charger_animator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1590373066826842289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991957757536427617}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 674311953340885827}
+  m_Father: {fileID: 3718471094153406278}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2930855478509930838
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,6 +393,7 @@ GameObject:
   - component: {fileID: 756276656990274442}
   - component: {fileID: 4104995383958111242}
   - component: {fileID: 3229128081381866268}
+  - component: {fileID: -8785149385226132776}
   m_Layer: 0
   m_Name: pumpShotgunController
   m_TagString: Untagged
@@ -406,12 +439,12 @@ MonoBehaviour:
   SlideRecoiltime: 15
   damage: 10
   headshotDamage: 20
-  reloadTime: 1
+  reloadTime: 7
   range: 100
   FireRate: 4
   FireSpread: 0.25
   AimSpread: 0.05
-  MagSize: 1
+  MagSize: 5
   Force: 100
   AdsSpeed: 5
   AdsFov: 50
@@ -428,11 +461,12 @@ MonoBehaviour:
   lineStart: {fileID: 2247948508069980564}
   RecoilPosition: {x: 0, y: 0, z: -0.15}
   CamRecoil: {x: -5, y: 0, z: 0}
-  idlePOS: {x: 0.257, y: -0.156, z: 0.382}
-  idleROT: {x: 0, y: 0, z: 0}
+  idlePOS: {x: 0.146, y: -0.236, z: 0.33}
+  idleROT: {x: 0, y: 90, z: 0}
   ADSPOS: {x: 0, y: -0.094, z: 0.382}
   idleSlidePOS: {x: 0, y: 0, z: 0}
   SlideRecoilPosition: {x: 0.9, y: 0, z: 0}
+  blockedRot: {x: 0, y: 90, z: -60}
   impact: {fileID: 5231154789652598663, guid: 58af690e950722d41aad3f95c0df8fe1, type: 3}
   hitDamage: {fileID: 3295849202559800175, guid: 6340594b358af624680ef5390330792b, type: 3}
   HitSound: {fileID: 8593543981772916808, guid: 9e287a754c11b3e4593de89e268437b6, type: 3}
@@ -579,6 +613,18 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-8785149385226132776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2930855478509930838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3517703002802592384
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,13 +650,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3517703002802592384}
-  m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3718471094153406278}
-  m_RootOrder: 7
+  m_Father: {fileID: 1590373066826842289}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6488205976090713181
 MeshFilter:
@@ -921,6 +967,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3718471094153406278}
   - component: {fileID: 7987671558413150922}
+  - component: {fileID: 5395870745030186341}
   m_Layer: 0
   m_Name: pumpShotgun
   m_TagString: Untagged
@@ -935,7 +982,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4094187053235977724}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.19105397, y: 0.19105396, z: 0.19105397}
   m_ConstrainProportionsScale: 0
@@ -947,16 +994,16 @@ Transform:
   - {fileID: 4925084778936293485}
   - {fileID: 1030572490763172375}
   - {fileID: 2755808312043592120}
-  - {fileID: 674311953340885827}
   - {fileID: 3769405935557534333}
   - {fileID: 9042683808103635665}
   - {fileID: 1776824821655790756}
   - {fileID: 2247948508069980564}
   - {fileID: 7927425008363464576}
   - {fileID: 447735115322311544}
+  - {fileID: 1590373066826842289}
   m_Father: {fileID: 8034635077275694010}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7987671558413150922
 Animator:
   serializedVersion: 5
@@ -965,7 +1012,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4094187053235977724}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: d2d920cb16af3eb48b10c213954abc87, type: 2}
   m_CullingMode: 0
@@ -977,6 +1024,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &5395870745030186341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4094187053235977724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5854246536396019893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +1065,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3718471094153406278}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6251280905068882619
 GameObject:
@@ -1031,14 +1090,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6251280905068882619}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.564, y: 0, z: 0}
+  m_LocalRotation: {x: -0.6573054, y: 0.70795554, z: 0.17584789, w: 0.18927793}
+  m_LocalPosition: {x: 1.492, y: -0.232, z: 0.073}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3718471094153406278}
-  m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: -29.855, y: 177.566, z: -85.102}
 --- !u!1 &6729243134431981605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,14 +1235,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7463239749738387965}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.25568405, y: 0.21452855, z: 0.5793721, w: 0.74359345}
+  m_LocalPosition: {x: -0.532, y: -0.093, z: -0.065}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3718471094153406278}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: -38.964, y: 1.678, z: 75.254}
 --- !u!1 &8326641888434008088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1215,7 +1274,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3718471094153406278}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &6956459482055953651
 ParticleSystem:
@@ -6085,7 +6144,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3718471094153406278}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2400421523149534126
 MeshFilter:

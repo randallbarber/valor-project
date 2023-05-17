@@ -180,6 +180,10 @@ public class Movement : MonoBehaviourPun
                 camera_lean_target.transform.localRotation = Quaternion.Lerp(camera_lean_target.transform.localRotation, Quaternion.identity, LeanTime * Time.deltaTime);
                 model_lean_target.transform.localRotation = Quaternion.Lerp(model_lean_target.transform.localRotation, Quaternion.identity, LeanTime * Time.deltaTime);
             }
+            if (Input.GetButton("Crouch"))
+            {
+
+            }
             if (mp_isMoving != prev_isMoving)
             {
                 if (mp_isMoving)
