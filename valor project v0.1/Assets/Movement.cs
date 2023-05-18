@@ -16,6 +16,8 @@ public class Movement : MonoBehaviourPun
     [SerializeField] LayerMask GroundMask;
     float speed;
     bool isGrounded;
+    bool movingBackwards;
+    bool strafing;
     bool mp_isMoving;
     bool prev_isMoving;
     Vector3 velocity;
@@ -23,6 +25,7 @@ public class Movement : MonoBehaviourPun
     [SerializeField] GameObject DummyModel;
     [SerializeField] GameObject MPDummyModel;
     [Header("Transforms")]
+    [SerializeField] Transform viewmodel;
     [SerializeField] Transform camera_lean_target;
     [SerializeField] Transform model_lean_target;
     [SerializeField] Transform strafe_target;
@@ -96,10 +99,11 @@ public class Movement : MonoBehaviourPun
                     {
                         FastBreathingSound.Play();
                     }
-                    if (Input.GetButton("Sprint")) // sprinting
+                    if (Input.GetButton("Sprint") && !strafing && !movingBackwards) // sprinting
                     {
                         Sprinting = true;
                         GunAnimator.SetBool("Sprinting", true);
+                        CamAnimator.SetBool("Sprinting", true);
                         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 80, 5 * Time.deltaTime);
                         speed = SprintSpeed;
                         WalkingSound.Stop();
@@ -111,6 +115,7 @@ public class Movement : MonoBehaviourPun
                     else
                     {
                         Sprinting = false;
+                        CamAnimator.SetBool("Sprinting", false);
                         GunAnimator.SetBool("Sprinting", false);
                         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 70, 5 * Time.deltaTime);
                         speed = WalkSpeed;
@@ -180,7 +185,7 @@ public class Movement : MonoBehaviourPun
                 camera_lean_target.transform.localRotation = Quaternion.Lerp(camera_lean_target.transform.localRotation, Quaternion.identity, LeanTime * Time.deltaTime);
                 model_lean_target.transform.localRotation = Quaternion.Lerp(model_lean_target.transform.localRotation, Quaternion.identity, LeanTime * Time.deltaTime);
             }
-            if (Input.GetButton("Crouch"))
+            if (Input.GetButton("Crouch")) // crouching
             {
 
             }
@@ -196,20 +201,50 @@ public class Movement : MonoBehaviourPun
                 }
                 prev_isMoving = mp_isMoving;
             }
-            if (Input.GetAxis("Horizontal") != 0)
+            if (Input.GetAxis("Vertical") <= 0)
+            {
+                movingBackwards = true;
+            }
+            else
+            {
+                movingBackwards = false;
+            }
+            if (Input.GetAxis("Horizontal") != 0) // strafing
             {
                 if (Input.GetAxis("Horizontal") >= 0)
                 {
-                    strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, 70f, 0f), strafeTime * Time.deltaTime);
+                    viewmodel.localRotation = Quaternion.Lerp(viewmodel.localRotation, Quaternion.Euler(0f, 0f, -10f), strafeTime * Time.deltaTime);
+                    if (Input.GetAxis("Vertical") == 0)
+                    {
+                        strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, 70f, 0f), strafeTime * Time.deltaTime);
+                        strafing = true;
+                    }
+                    else
+                    {
+                        strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, 45f, 0f), strafeTime * Time.deltaTime);
+                        strafing = false;
+                    }
                 }
                 if (Input.GetAxis("Horizontal") <= 0)
                 {
-                    strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, -70f, 0f), strafeTime * Time.deltaTime);
+                    viewmodel.localRotation = Quaternion.Lerp(viewmodel.localRotation, Quaternion.Euler(0f, 0f, 10f), strafeTime * Time.deltaTime);
+                    if (Input.GetAxis("Vertical") == 0)
+                    {
+                        strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, -70f, 0f), strafeTime * Time.deltaTime);
+                        strafing = true;
+                    }
+                    else
+                    {
+                        strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.Euler(0f, -45f, 0f), strafeTime * Time.deltaTime);
+                        strafing = false;
+                    }
                 }
             }
             else
             {
+                strafing = false;
                 strafe_target.localRotation = Quaternion.Lerp(strafe_target.localRotation, Quaternion.identity, strafeTime * Time.deltaTime);
+                viewmodel.localRotation = Quaternion.Lerp(viewmodel.localRotation, Quaternion.Euler(0f, 0f, 0f), strafeTime * Time.deltaTime);
             }
         }
         if (!photonView.IsMine)

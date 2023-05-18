@@ -171,6 +171,7 @@ MonoBehaviour:
     m_Bits: 8
   DummyModel: {fileID: 3585687493889478228}
   MPDummyModel: {fileID: 9188584836201563842}
+  viewmodel: {fileID: 2687851655344205302}
   camera_lean_target: {fileID: 8034969500383283232}
   model_lean_target: {fileID: 1819029926599958392}
   strafe_target: {fileID: 4352998987725078509}
@@ -8591,7 +8592,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8359003618209415723}
-  m_LocalRotation: {x: -0.031307653, y: 0.046536084, z: 0.029024266, w: 0.9980039}
+  m_LocalRotation: {x: -0.031307656, y: 0.046536084, z: 0.029024268, w: 0.9980039}
   m_LocalPosition: {x: -0.0026167608, y: 0.9899599, z: -0.0012629427}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

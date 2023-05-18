@@ -642,7 +642,7 @@ Transform:
   m_GameObject: {fileID: 2764956111804049041}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0000002, y: 1, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 270258453396777886}
@@ -672,7 +672,7 @@ MonoBehaviour:
   damage: 5
   headshotDamage: 8
   reloadTime: 3.2
-  range: 100
+  range: 500
   FireRate: 9
   FireSpread: 0.1
   AimSpread: 0.05
@@ -684,10 +684,10 @@ MonoBehaviour:
   RecoilRotSpread: 0.5
   AimRecoilRotSpread: 0.1
   Radius: 0.1
-  mp_IdlePos: {x: 0, y: 0, z: 0}
-  mp_IdleRot: {x: 0, y: 0, z: 0}
-  mp_RecoilPosition: {x: 0, y: 0, z: 0}
-  mp_AimPos: {x: 0, y: 0, z: 0}
+  mp_IdlePos: {x: -0.281, y: 0.103, z: -0.016}
+  mp_IdleRot: {x: 72.20006, y: 349.0182, z: 184.68842}
+  mp_RecoilPosition: {x: 0.005, y: 0, z: 0}
+  mp_AimPos: {x: -0.266, y: 0.085, z: -0.07}
   gunModel: {fileID: 270258453396777886}
   SlidePOS: {fileID: 4107613014104893339}
   lineStart: {fileID: 2764956112852257964}
